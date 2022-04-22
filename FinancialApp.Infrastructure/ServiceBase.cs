@@ -1,43 +1,55 @@
 ﻿using FinacialApp.Shared;
+using FinancialApp.Shared;
+using Microsoft.AspNetCore.JsonPatch;
 
 namespace FinancialApp.Shared;
 
-public abstract class ServiceBase<TEntity> : IDisposable, IServiceBase<TEntity> where TEntity : class
+public abstract class ServiceBase<TEntity> : IServiceBase<TEntity> where TEntity : class
 {
-	private readonly IRepositoryBase<TEntity> _repository;
+	private readonly IRepositoryBase<TEntity> _TEntityRepository;
 
-	public ServiceBase(IRepositoryBase<TEntity> Repository)
+	public ServiceBase(IRepositoryBase<TEntity> tEntityRepository)
 	{
-		_repository = Repository;
+		_TEntityRepository = tEntityRepository;
 	}
 
-	public virtual void Add(TEntity obj)
+	public virtual async Task Add(TEntity obj)
 	{
-		_repository.Add(obj);
+		await _TEntityRepository.Add(obj);
 	}
 
-	public virtual TEntity GetById(int id)
+	public List<TEntity> GetProducts()
 	{
-		return _repository.GetById(id);
+		return _TEntityRepository.GetProducts();
 	}
 
-	public virtual IEnumerable<TEntity> GetAll()
+	public virtual TEntity GetById(Guid id)
 	{
-		return _repository.GetAll();
+		return _TEntityRepository.GetById(id);
+	}
+
+	public List<TEntity> GetByPage(int page)
+	{
+		return _TEntityRepository.GetByPage(page);
+	}
+
+	public virtual List<TEntity> GetAll()
+	{
+		return _TEntityRepository.GetAll();
 	}
 
 	public virtual void Update(TEntity obj)
 	{
-		_repository.Update(obj);
+		_TEntityRepository.Update(obj);
+	}
+
+	public virtual Task Patch(JsonPatchDocument obj, Guid id)
+	{
+		return _TEntityRepository.Patch(obj, id);
 	}
 
 	public virtual void Remove(TEntity obj)
 	{
-		_repository.Remove(obj);
-	}
-
-	public virtual void Dispose()
-	{
-		_repository.Dispose();
+		_TEntityRepository.Remove(obj);
 	}
 }

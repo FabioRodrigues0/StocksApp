@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Services\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\FinancialApp.Domain\FinancialApp.Domain.csproj" />
     <ProjectReference Include="..\FinancialApp.Infrastructure\FinancialApp.Shared.csproj" />
   </ItemGroup>

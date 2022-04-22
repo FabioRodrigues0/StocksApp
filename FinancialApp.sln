@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32328.378
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FinancialApp", "FinancialApp\FinancialApp.csproj", "{95D1F118-0DB0-4C71-B094-A512609071B1}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Domain", "Domain", "{173704A4-3751-4BE1-A2B2-FB4EFD4E466E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{A616CBD4-14C9-4B0D-82A8-A786F86292EC}"
@@ -21,15 +19,25 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FinancialApp.Domain.Core", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FinancialApp.Domain.Services", "FinancialApp.Domain.Services\FinancialApp.Domain.Services.csproj", "{2F8E8B6F-8EA4-4DED-A1C3-FBF2145C4FAF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinancialApp.DTO", "FinancialApp.DTO\FinancialApp.DTO.csproj", "{2AA4B5E2-FB91-4282-B11A-C4E6B911ED14}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FinancialApp.DTO", "FinancialApp.DTO\FinancialApp.DTO.csproj", "{2AA4B5E2-FB91-4282-B11A-C4E6B911ED14}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinancialApp.Application", "FinancialApp.Application\FinancialApp.Application.csproj", "{0577B051-954C-486A-B4F8-98BC13B84323}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FinancialApp.Application", "FinancialApp.Application\FinancialApp.Application.csproj", "{0577B051-954C-486A-B4F8-98BC13B84323}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinancialApp.Repository", "FinancialApp.Repository\FinancialApp.Repository.csproj", "{74AE064E-23AB-42A2-9FEE-CEDDE1DAB850}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FinancialApp.CrossCutting.Adapter", "FinancialApp.CrossCutting.Adapter\FinancialApp.CrossCutting.Adapter.csproj", "{132F8715-38AF-4E59-9A23-E6A94F48AD6F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinancialApp.CrossCutting.Adapter", "FinancialApp.CrossCutting.Adapter\FinancialApp.CrossCutting.Adapter.csproj", "{132F8715-38AF-4E59-9A23-E6A94F48AD6F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FinancialApp.CrossCutting.IOC", "FinancialApp.CrossCutting.IOC\FinancialApp.CrossCutting.IOC.csproj", "{3B1D9610-E50B-404F-B8E7-C3FDFF02E79D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinancialApp.CrossCutting.IOC", "FinancialApp.CrossCutting.IOC\FinancialApp.CrossCutting.IOC.csproj", "{3B1D9610-E50B-404F-B8E7-C3FDFF02E79D}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FrontAPIs", "FrontAPIs", "{556BFE9D-8776-4E30-9B62-8F488BCD9342}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FinancialApp.API.BuyRequest", "FinancialApp.API.BuyRequest\FinancialApp.API.BuyRequest.csproj", "{015CA348-EA80-458B-847B-ED1979D3EBCD}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FinancialApp.API.Document", "FinancialApp.API.Document\FinancialApp.API.Document.csproj", "{FF3955FC-835E-48F5-B341-9CC994E03C67}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FinancialApp.API.CashBook", "FinancialApp.API.CashBook\FinancialApp.API.CashBook.csproj", "{BF14AD16-7588-4E92-8003-8D663427DFDA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{A800291D-DC72-4522-9E6D-7F5C750533E6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinancialApp.Tests", "FinancialApp.Tests\FinancialApp.Tests.csproj", "{76A65D92-B2AB-478F-A10F-D9054F429902}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,10 +45,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{95D1F118-0DB0-4C71-B094-A512609071B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{95D1F118-0DB0-4C71-B094-A512609071B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{95D1F118-0DB0-4C71-B094-A512609071B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{95D1F118-0DB0-4C71-B094-A512609071B1}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3C407232-E035-45C7-A8A2-14624C6329B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3C407232-E035-45C7-A8A2-14624C6329B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3C407232-E035-45C7-A8A2-14624C6329B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -69,10 +73,6 @@ Global
 		{0577B051-954C-486A-B4F8-98BC13B84323}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0577B051-954C-486A-B4F8-98BC13B84323}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0577B051-954C-486A-B4F8-98BC13B84323}.Release|Any CPU.Build.0 = Release|Any CPU
-		{74AE064E-23AB-42A2-9FEE-CEDDE1DAB850}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{74AE064E-23AB-42A2-9FEE-CEDDE1DAB850}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{74AE064E-23AB-42A2-9FEE-CEDDE1DAB850}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{74AE064E-23AB-42A2-9FEE-CEDDE1DAB850}.Release|Any CPU.Build.0 = Release|Any CPU
 		{132F8715-38AF-4E59-9A23-E6A94F48AD6F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{132F8715-38AF-4E59-9A23-E6A94F48AD6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{132F8715-38AF-4E59-9A23-E6A94F48AD6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -81,6 +81,22 @@ Global
 		{3B1D9610-E50B-404F-B8E7-C3FDFF02E79D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3B1D9610-E50B-404F-B8E7-C3FDFF02E79D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3B1D9610-E50B-404F-B8E7-C3FDFF02E79D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{015CA348-EA80-458B-847B-ED1979D3EBCD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{015CA348-EA80-458B-847B-ED1979D3EBCD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{015CA348-EA80-458B-847B-ED1979D3EBCD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{015CA348-EA80-458B-847B-ED1979D3EBCD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FF3955FC-835E-48F5-B341-9CC994E03C67}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF3955FC-835E-48F5-B341-9CC994E03C67}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF3955FC-835E-48F5-B341-9CC994E03C67}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF3955FC-835E-48F5-B341-9CC994E03C67}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF14AD16-7588-4E92-8003-8D663427DFDA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF14AD16-7588-4E92-8003-8D663427DFDA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF14AD16-7588-4E92-8003-8D663427DFDA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF14AD16-7588-4E92-8003-8D663427DFDA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{76A65D92-B2AB-478F-A10F-D9054F429902}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76A65D92-B2AB-478F-A10F-D9054F429902}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76A65D92-B2AB-478F-A10F-D9054F429902}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76A65D92-B2AB-478F-A10F-D9054F429902}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -93,9 +109,12 @@ Global
 		{2F8E8B6F-8EA4-4DED-A1C3-FBF2145C4FAF} = {173704A4-3751-4BE1-A2B2-FB4EFD4E466E}
 		{2AA4B5E2-FB91-4282-B11A-C4E6B911ED14} = {27574071-B377-4116-84C8-8918FFC46A46}
 		{0577B051-954C-486A-B4F8-98BC13B84323} = {27574071-B377-4116-84C8-8918FFC46A46}
-		{74AE064E-23AB-42A2-9FEE-CEDDE1DAB850} = {A616CBD4-14C9-4B0D-82A8-A786F86292EC}
 		{132F8715-38AF-4E59-9A23-E6A94F48AD6F} = {A616CBD4-14C9-4B0D-82A8-A786F86292EC}
 		{3B1D9610-E50B-404F-B8E7-C3FDFF02E79D} = {A616CBD4-14C9-4B0D-82A8-A786F86292EC}
+		{015CA348-EA80-458B-847B-ED1979D3EBCD} = {556BFE9D-8776-4E30-9B62-8F488BCD9342}
+		{FF3955FC-835E-48F5-B341-9CC994E03C67} = {556BFE9D-8776-4E30-9B62-8F488BCD9342}
+		{BF14AD16-7588-4E92-8003-8D663427DFDA} = {556BFE9D-8776-4E30-9B62-8F488BCD9342}
+		{76A65D92-B2AB-478F-A10F-D9054F429902} = {A800291D-DC72-4522-9E6D-7F5C750533E6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {AD7CCD41-F2FA-40AA-BAA3-344260C92170}

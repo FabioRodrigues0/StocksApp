@@ -1,80 +1,72 @@
-﻿using FinacialApp.Shared;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using FinacialApp.Domain.Models;
+using FinancialApp.Shared;
 
-namespace FinacialApp.Domain.Models;
+namespace FinancialApp.Domain.Models;
 
 public class BuyRequest : BaseModel
 {
+	public readonly BuyRequestProducts BuyRequestProducts;
+
 	public BuyRequest()
 	{
 	}
 
 	public BuyRequest(long code,
-										DateTimeOffset dateDelivery,
+										DateTimeOffset deliveryDate,
 										Guid client,
 										string clientDescription,
 										string clientEmail,
-										string clientPhoneNumber,
+										string clientPhone,
 										Status status,
-										string address,
-										string addressNumber,
-										string zipCode,
-										string addressDescription,
+										string street,
+										string number,
+										string sector,
+										string complement,
 										string city,
 										string state,
-										decimal productValor,
-										decimal descont,
-										decimal costValor,
-										ICollection<BuyRequestProducts> productsList)
+										decimal discount,
+										List<BuyRequestProducts> products)
 	{
 		Id = Guid.NewGuid();
 		Code = code;
 		Date = DateTimeOffset.Now;
-		DateDelivery = dateDelivery;
+		DeliveryDate = deliveryDate;
 		Client = client;
 		ClientDescription = clientDescription;
 		ClientEmail = clientEmail;
-		ClientPhoneNumber = clientPhoneNumber;
-		Status = status;
-		Address = address;
-		AddressNumber = addressNumber;
-		ZipCode = zipCode;
-		AddressDescription = addressDescription;
+		ClientPhone = clientPhone;
+		Status = Status.Received;
+		Street = street;
+		Number = number;
+		Sector = sector;
+		Complement = complement;
 		City = city;
 		State = state;
-		ProductValor = productValor;
-		Descont = descont;
-		CostValor = costValor;
-		ProductsList = productsList;
-		TotalValor = ProductValor - Descont;
+		Discount = discount;
+		if(BuyRequestProducts != null) Cost = BuyRequestProducts.Total;
+		Products = products.ToList();
+		if(BuyRequestProducts != null) ProductValor = BuyRequestProducts.Total;
+		TotalValor = ProductValor - Discount;
 	}
 
 	public Guid Id { get; set; }
 	public long Code { get; set; }
 	public DateTimeOffset Date { get; set; }
-	public DateTimeOffset DateDelivery { get; set; }
+	public DateTimeOffset DeliveryDate { get; set; }
+	public List<BuyRequestProducts> Products { get; set; }
 	public Guid Client { get; set; }
 	public string ClientDescription { get; set; }
 	public string ClientEmail { get; set; }
-	public string ClientPhoneNumber { get; set; }
-	public ICollection<BuyRequestProducts> ProductsList { get; set; }
+	public string ClientPhone { get; set; }
 	public Status Status { get; set; }
-	public string Address { get; set; }
-	public string AddressNumber { get; set; }
-	public string ZipCode { get; set; }
-	public string AddressDescription { get; set; }
+	public string Street { get; set; }
+	public string Number { get; set; }
+	public string Sector { get; set; }
+	public string Complement { get; set; }
 	public string City { get; set; }
 	public string State { get; set; }
-
-	[Column(TypeName = "decimal(18,2)")]
+	public decimal Discount { get; set; }
+	public decimal Cost { get; set; }
 	public decimal ProductValor { get; set; }
-
-	[Column(TypeName = "decimal(18,2)")]
-	public decimal Descont { get; set; }
-
-	[Column(TypeName = "decimal(18,2)")]
-	public decimal CostValor { get; set; }
-
-	[Column(TypeName = "decimal(18,2)")]
 	public decimal TotalValor { get; set; }
 }

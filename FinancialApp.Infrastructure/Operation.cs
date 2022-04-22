@@ -1,7 +1,7 @@
-﻿namespace FinacialApp.Shared;
+﻿namespace FinancialApp.Shared;
 
 public enum Operation
 {
-	Input,
-	Output
+	Input = 1,
+	Output = 2
 }

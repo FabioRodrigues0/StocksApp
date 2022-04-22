@@ -1,16 +1,22 @@
-﻿namespace FinacialApp.Shared;
+﻿using Microsoft.AspNetCore.JsonPatch;
+
+namespace FinacialApp.Shared;
 
 public interface IRepositoryBase<TEntity> where TEntity : class
 {
-	void Add(TEntity obj);
+	Task Add(TEntity obj);
 
-	TEntity GetById(int id);
+	TEntity GetById(Guid id);
 
-	IEnumerable<TEntity> GetAll();
+	List<TEntity> GetByPage(int page);
 
-	void Update(TEntity obj);
+	List<TEntity> GetAll();
 
-	void Remove(TEntity obj);
+	List<TEntity> GetProducts();
 
-	void Dispose();
+	Task Update(TEntity obj);
+
+	Task Remove(TEntity obj);
+
+	Task Patch(JsonPatchDocument obj, Guid id);
 }

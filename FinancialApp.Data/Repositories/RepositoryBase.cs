@@ -1,69 +1,84 @@
-﻿using FinacialApp.Data;
-using FinacialApp.Shared;
+﻿using FinacialApp.Shared;
+using FinancialApp.Shared;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.EntityFrameworkCore;
 
-namespace FinancialApp.Data;
+namespace FinancialApp.Data.Repositories;
 
 public class RepositoryBase<TEntity> : IRepositoryBase<TEntity> where TEntity : class
 {
 	private readonly DataContext _dataContext;
+	protected readonly DbSet<TEntity> dbSet;
 
 	public RepositoryBase(DataContext dataContext)
 	{
 		_dataContext = dataContext;
+		dbSet = _dataContext.Set<TEntity>();
 	}
 
-	public void Add(TEntity obj)
+	public virtual async Task Add(TEntity obj)
 	{
 		try
 		{
-			_dataContext.Set<TEntity>().Add(obj);
-			_dataContext.SaveChanges();
+			await dbSet.AddAsync(obj);
+			await _dataContext.SaveChangesAsync();
 		}
-		catch(Exception ex)
+		catch(Exception e)
 		{
-			throw ex;
+			Console.WriteLine(e);
+			throw;
 		}
 	}
 
-	public IEnumerable<TEntity> GetAll()
+	public List<TEntity> GetByPage(int page)
 	{
-		return _dataContext.Set<TEntity>().ToList();
+		const float pageResults = 10f;
+
+		return dbSet
+			.Skip((page - 1) * dbSet.Count())
+			.Take((int)pageResults)
+			.ToList();
 	}
 
-	public TEntity GetById(int id)
+	public List<TEntity> GetAll()
 	{
-		return _dataContext.Set<TEntity>().Find(id);
+		return dbSet.ToList();
 	}
 
-	public void Remove(TEntity obj)
+	public virtual List<TEntity> GetProducts()
 	{
-		try
-		{
-			_dataContext.Set<TEntity>().Remove(obj);
-			_dataContext.SaveChanges();
-		}
-		catch(Exception ex)
-		{
-			throw ex;
-		}
+		return dbSet.ToList();
 	}
 
-	public void Dispose()
+	public TEntity GetById(Guid id)
 	{
-		throw new NotImplementedException();
+		return dbSet.Find(id);
 	}
 
-	public void Update(TEntity obj)
+	public virtual async Task Remove(TEntity obj)
+	{
+		dbSet.Remove(obj);
+		await _dataContext.SaveChangesAsync();
+	}
+
+	public virtual async Task Update(TEntity obj)
 	{
 		try
 		{
 			_dataContext.Entry(obj).State = EntityState.Modified;
-			_dataContext.SaveChanges();
+			await _dataContext.SaveChangesAsync();
 		}
 		catch(Exception ex)
 		{
 			throw ex;
 		}
+	}
+
+	public virtual async Task Patch(JsonPatchDocument obj, Guid id)
+	{
+		var result = await dbSet.FindAsync(id);
+		if(result != null)
+			obj.ApplyTo(result);
+		await _dataContext.SaveChangesAsync();
 	}
 }

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace FinacialApp.Shared;
+namespace FinancialApp.Shared;
 
 public class BaseModel
 {

@@ -1,9 +1,9 @@
-﻿namespace FinacialApp.Shared;
+﻿namespace FinancialApp.Shared;
 
 public enum Status
 {
-	Received,
-	AwaitingDelivery,
-	AwaitingDownload,
-	Finished
+	Received = 1,
+	AwaitingDelivery = 2,
+	AwaitingDownload = 3,
+	Finished = 4
 }

@@ -2,16 +2,14 @@
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Logging;
 using FinacialApp.Domain.Models;
+using FinancialApp.Data.Configurations;
+using FinancialApp.Domain.Models;
 
-namespace FinacialApp.Data;
+namespace FinancialApp.Data;
 
 public class DataContext : DbContext
 {
 	public DataContext(DbContextOptions<DataContext> options) : base(options)
-	{
-	}
-
-	public DataContext()
 	{
 	}
 
@@ -35,14 +33,16 @@ public class DataContext : DbContext
 
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{
-		modelBuilder.Entity<BuyRequest>()
-			.HasKey("Id");
-		modelBuilder.Entity<CashBook>()
-			.HasKey("Id");
-		modelBuilder.Entity<Document>()
-			.HasKey("Id");
-		modelBuilder.Entity<BuyRequestProducts>()
-			.HasKey("Id");
+		modelBuilder.Entity<BuyRequest>().HasMany(w => w.Products)
+			.WithOne(w => w.BuyRequest)
+			.IsRequired()
+			.HasForeignKey(f => f.BuyRequestId)
+			.HasConstraintName("FK_BuyRequestProducts_BuyRequestId_BuyRequest_Id");
+
+		modelBuilder.ApplyConfiguration(new BuyRequestConfiguration()).Entity<BuyRequest>();
+		modelBuilder.ApplyConfiguration(new BuyRequestProductConfiguration()).Entity<BuyRequestProducts>();
+		modelBuilder.ApplyConfiguration(new CashBookConfiguration()).Entity<CashBook>();
+		modelBuilder.ApplyConfiguration(new DocumentConfiguration()).Entity<Document>();
 	}
 }
 

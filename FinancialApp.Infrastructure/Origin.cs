@@ -1,7 +1,7 @@
-﻿namespace FinacialApp.Shared;
+﻿namespace FinancialApp.Shared;
 
 public enum Origin
 {
-	BuyRequest,
-	Document
+	BuyRequest = 1,
+	Document = 2
 }

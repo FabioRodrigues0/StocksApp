@@ -1,7 +1,7 @@
-﻿namespace FinacialApp.Shared;
+﻿namespace FinancialApp.Shared;
 
 public enum ProductCategory
 {
-	Digital,
-	Physical
+	Digital = 1,
+	Physical = 2
 }

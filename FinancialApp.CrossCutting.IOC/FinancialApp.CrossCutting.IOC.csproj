@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -7,9 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Autofac" Version="6.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\FinancialApp.Application\FinancialApp.Application.csproj" />
+    <ProjectReference Include="..\FinancialApp.CrossCutting.Adapter\FinancialApp.CrossCutting.Adapter.csproj" />
+    <ProjectReference Include="..\FinancialApp.Data\FinancialApp.Data.csproj" />
     <ProjectReference Include="..\FinancialApp.Domain.Services\FinancialApp.Domain.Services.csproj" />
-    <ProjectReference Include="..\FinancialApp.Repository\FinancialApp.Repository.csproj" />
   </ItemGroup>
 
 </Project>

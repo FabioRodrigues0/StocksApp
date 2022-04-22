@@ -1,11 +1,11 @@
-﻿namespace FinacialApp.Shared;
+﻿namespace FinancialApp.Shared;
 
 public enum TypeDocument
 {
-	TaxInvoice,
-	Invoice,
-	Receipt,
-	Contract,
-	Payroll,
-	Other
+	TaxInvoice = 1,
+	Invoice = 2,
+	Receipt = 3,
+	Contract = 4,
+	Payroll = 5,
+	Other = 6
 }

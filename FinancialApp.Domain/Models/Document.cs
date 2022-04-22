@@ -1,4 +1,7 @@
-﻿using FinacialApp.Shared;
+﻿using FinancialApp.Shared;
+
+using FinancialApp.Shared;
+
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FinacialApp.Domain.Models;

@@ -1,14 +1,22 @@
-﻿namespace FinancialApp.Shared;
+﻿using Microsoft.AspNetCore.JsonPatch;
+
+namespace FinancialApp.Shared;
 
 public interface IServiceBase<TEntity> where TEntity : class
 {
-	void Add(TEntity obj);
+	Task Add(TEntity obj);
 
 	void Update(TEntity obj);
 
 	void Remove(TEntity obj);
 
-	IEnumerable<TEntity> GetAll();
+	List<TEntity> GetByPage(int page);
 
-	TEntity GetById(int id);
+	List<TEntity> GetAll();
+
+	List<TEntity> GetProducts();
+
+	TEntity GetById(Guid id);
+
+	Task Patch(JsonPatchDocument obj, Guid id);
 }
