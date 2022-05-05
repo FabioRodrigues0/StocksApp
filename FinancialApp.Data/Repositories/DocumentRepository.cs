@@ -1,10 +1,13 @@
-﻿using FinacialApp.Domain.Models;
+﻿using System.Net.Http.Json;
+using System.Reflection.Metadata.Ecma335;
 using FinancialApp.Domain.Core.Repositories;
+using FinancialApp.Domain.Models;
+using FinancialApp.DTO.DTO;
 using FinancialApp.Shared;
-using System.Net.Http.Json;
-using FinancialApp.Data.Repositories;
+using FinancialApp.Shared.Enums;
+using Microsoft.EntityFrameworkCore;
 
-namespace FinancialApp.Data;
+namespace FinancialApp.Data.Repositories;
 
 public class DocumentRepository : RepositoryBase<Document>, IDocumentRepository
 {
@@ -15,78 +18,88 @@ public class DocumentRepository : RepositoryBase<Document>, IDocumentRepository
 		_http = http;
 	}
 
-	public override async Task Add(Document obj)
+	public override async Task<Document> Add(Document obj)
 	{
-		try
+		await base.Add(obj);
+		if(obj.Paid)
 		{
-			await base.Add(obj);
-			if(obj.isPaid)
+			var result = new CashBookDto
 			{
-				var result = new CashBook()
-				{
-					Id = Guid.NewGuid(),
-					Origin = Origin.Document,
-					OriginId = obj.Id,
-					Description = "Document nº" + obj.Number,
-					Type = obj.Operation == Operation.Input ? StatusCashBook.Payment : StatusCashBook.Receivement,
-					Valor = obj.Total
-				};
-				await _http.PostAsJsonAsync("https://localhost:7063/api/CashBook", result);
-			}
+				Origin = Origin.Document,
+				OriginId = obj.Id,
+				Description = "Document nº" + obj.Number,
+				Type = obj.Operation == Operation.Input ? StatusCashBook.Payment : StatusCashBook.Receivement,
+				Valor = obj.Total
+			};
+			await _http.PostAsJsonAsync("https://localhost:7063/api/CashBook", result);
 		}
-		catch(Exception ex)
-		{
-			throw ex;
-		}
+		return obj;
 	}
 
-	public override async Task Remove(Document obj)
+	public override async Task<Document> Remove(Guid id)
 	{
-		try
+		var result = await dbSet
+				.Where(x => x.Id == id)
+				.AsNoTracking()
+				.FirstOrDefaultAsync();
+		await base.Remove(id);
+		if(result.Paid)
 		{
-			await base.Remove(obj);
-			if(obj.isPaid)
+			var cashBook = new CashBookDto
 			{
-				var result = new CashBook()
-				{
-					Id = Guid.NewGuid(),
-					Origin = Origin.Document,
-					OriginId = obj.Id,
-					Description = "Document nº" + obj.Number,
-					Type = StatusCashBook.Reversal,
-					Valor = obj.Total
-				};
-				await _http.PostAsJsonAsync("https://localhost:7063/api/CashBook", result);
-			}
+				Origin = Origin.Document,
+				OriginId = result.Id,
+				Description = "Document nº" + result.Number,
+				Type = StatusCashBook.Reversal,
+				Valor = result.Total
+			};
+			await _http.PostAsJsonAsync("https://localhost:7063/api/CashBook", cashBook);
 		}
-		catch(Exception ex)
-		{
-			throw ex;
-		}
+		return result;
 	}
 
-	public override async Task Update(Document obj)
+	public override async Task<Document> Update(Document obj)
 	{
-		try
+		var result = await dbSet
+			.Where(x => x.Id == obj.Id)
+			.AsNoTracking()
+			.FirstOrDefaultAsync();
+		await base.Update(obj);
+		if(obj.Paid)
 		{
-			await base.Update(obj);
-			if(obj.isPaid)
+			var cashBook = new CashBookDto
 			{
-				var result = new CashBook()
-				{
-					Id = Guid.NewGuid(),
-					Origin = Origin.Document,
-					OriginId = obj.Id,
-					Description = "Document nº" + obj.Number,
-					Type = StatusCashBook.Reversal,
-					Valor = obj.Total
-				};
-				await _http.PostAsJsonAsync("https://localhost:7063/api/CashBook", result);
-			}
+				Origin = Origin.Document,
+				OriginId = obj.Id,
+				Description = "Document nº" + obj.Number,
+				Type = StatusCashBook.Reversal,
+				Valor = result.Total - obj.Total
+			};
+			await _http.PostAsJsonAsync("https://localhost:7063/api/CashBook", cashBook);
 		}
-		catch(Exception ex)
+		return obj;
+	}
+
+	public virtual async Task<Document> Patch(Document obj)
+	{
+		var result = await dbSet
+			.Where(x => x.Id == obj.Id)
+			.AsNoTracking()
+			.FirstOrDefaultAsync();
+		result.Paid = obj.Paid;
+		await base.Patch(result);
+		if(obj.Paid)
 		{
-			throw ex;
+			var cashBook = new CashBookDto
+			{
+				Origin = Origin.Document,
+				OriginId = result.Id,
+				Description = "Document nº" + result.Number,
+				Type = StatusCashBook.Reversal,
+				Valor = result.Total
+			};
+			await _http.PostAsJsonAsync("https://localhost:7063/api/CashBook", cashBook);
 		}
+		return result;
 	}
 }

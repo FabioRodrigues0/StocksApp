@@ -1,8 +1,7 @@
-﻿using FinacialApp.Domain.Models;
-using FinancialApp.Data.Repositories;
-using FinancialApp.Domain.Core.Repositories;
+﻿using FinancialApp.Domain.Core.Repositories;
+using FinancialApp.Domain.Models;
 
-namespace FinancialApp.Data;
+namespace FinancialApp.Data.Repositories;
 
 public class BuyRequestProductsRepository : RepositoryBase<BuyRequestProducts>, IBuyRequestProductsRepository
 {
@@ -11,10 +10,5 @@ public class BuyRequestProductsRepository : RepositoryBase<BuyRequestProducts>, 
 	public BuyRequestProductsRepository(DataContext context, HttpClient http) : base(context)
 	{
 		_http = http;
-	}
-
-	public override List<BuyRequestProducts> GetProducts()
-	{
-		return dbSet.ToList();
 	}
 }

@@ -1,99 +1,72 @@
 ﻿using AutoMapper;
 using FinancialApp.Application.Interface;
-using FinancialApp.CrossCutting.Adapter.Interfaces;
 using FinancialApp.Domain.Core.Services;
+using FinancialApp.Domain.Models;
 using FinancialApp.DTO.DTO;
-using Microsoft.AspNetCore.JsonPatch;
 
 namespace FinancialApp.Application.Service;
 
 public class ApplicationBuyRequestService : IApplicationBuyRequestService
 {
-	private readonly IBuyRequestService _buyRequestService;
-	private readonly IBuyRequestProductService _buyRequestProductService;
-	private readonly IBuyRequestMapper _buyRequestMapper;
+    private readonly IBuyRequestService _buyRequestService;
+    private readonly IMapper _mapper;
 
-	public ApplicationBuyRequestService(IBuyRequestService buyRequestService,
-																			IBuyRequestMapper buyRequestMapper,
-																			IBuyRequestProductService buyRequestProductService)
-	{
-		_buyRequestService = buyRequestService;
-		_buyRequestProductService = buyRequestProductService;
-		_buyRequestMapper = buyRequestMapper;
-	}
+    public ApplicationBuyRequestService(
+        IBuyRequestService buyRequestService,
+        IMapper mapper)
+    {
+        _buyRequestService = buyRequestService;
+        _mapper = mapper;
+    }
 
-	public async Task Add(BuyRequestDto obj)
-	{
-		var buyRequests = _buyRequestMapper.MapperToEntity(obj);
-		await _buyRequestService.Add(buyRequests);
-	}
+    public async Task<BuyRequest> Add(BuyRequestDto obj)
+    {
+        var result = _mapper.Map<BuyRequest>(obj);
+        var response = await _buyRequestService.Add(result);
+        return response;
+    }
 
-	public BuyRequestDto GetById(Guid id)
-	{
-		var buyRequests = _buyRequestService.GetById(id);
-		var buyRequestsProducts = _buyRequestProductService.GetProducts();
-		if(buyRequestsProducts.Count == 1)
-		{
-			buyRequests.Products.AddRange(buyRequestsProducts);
-		}
-		else
-		{
-			foreach(var result in buyRequestsProducts.Select(br => buyRequestsProducts.ToList().Where(p => p.Id == id)))
-			{
-				buyRequests.Products.AddRange(result);
-			}
-		}
+    public async Task<BuyRequestDto> GetById(Guid id)
+    {
+        var buyRequests = await _buyRequestService.GetById(id);
+        var buyRequestDto = _mapper.Map<BuyRequestDto>(buyRequests);
+        return buyRequestDto;
+    }
 
-		var buyRequestDto = _buyRequestMapper.MapperToDTO(buyRequests);
+    public async Task<PagesBuyRequestDto> GetAll(int page)
+    {
+        var pages = new PagesBuyRequestDto();
+        const int pageResults = 10;
 
-		return buyRequestDto;
-	}
+        var buyRequests = await _buyRequestService.GetAll();
+        var result = buyRequests.Skip((page - 1) * pageResults).Take(pageResults).ToList();
 
-	public PagesBuyRequestDto GetByPage(int page)
-	{
-		var buyRequests = _buyRequestService.GetByPage(page);
-		var buyRequestsProducts = _buyRequestProductService.GetProducts();
-		foreach(var br in buyRequests)
-		{
-			var result = buyRequestsProducts.ToList().Where(p => p.Id == br.Id);
-			br.Products.AddRange(result);
-		}
+        var toPages = _mapper.Map<List<BuyRequestDto>>(result);
+        pages = _mapper.Map<PagesBuyRequestDto>(toPages);
 
-		var buyRequestDto = _buyRequestMapper.MapperListBuyRequest(buyRequests, page);
+        pages.CurrentPage = page;
+        pages.Pages = (int)Math.Ceiling(buyRequests.Count() / 10f);
 
-		return buyRequestDto;
-	}
+        return pages;
+    }
 
-	public PagesBuyRequestDto GetAll()
-	{
-		var buyRequests = _buyRequestService.GetAll();
-		var buyRequestsProducts = _buyRequestProductService.GetProducts();
-		foreach(var br in buyRequests)
-		{
-			var result = buyRequestsProducts.ToList().Where(p => p.Id == br.Id);
-			br.Products.AddRange(result);
-			br.Products.Count();
-		}
+    public async Task<BuyRequest> Update(BuyRequestUpdateDto obj)
+    {
+        var result = _mapper.Map<BuyRequest>(obj);
+        var response = await _buyRequestService.Update(result);
+        return response;
+    }
 
-		var buyRequestDto = _buyRequestMapper.MapperListBuyRequest(buyRequests, 1);
+    public async Task<BuyRequest> Patch(BuyRequestPatchDto obj)
+    {
+        var result = _mapper.Map<BuyRequest>(obj);
+        var response = await _buyRequestService.Patch(result);
+        return response;
+    }
 
-		return buyRequestDto;
-	}
-
-	public void Update(BuyRequestDto obj)
-	{
-		var buyRequests = _buyRequestMapper.MapperToEntity(obj);
-		_buyRequestService.Update(buyRequests);
-	}
-
-	public Task Patch(JsonPatchDocument obj, Guid id)
-	{
-		return _buyRequestService.Patch(obj, id);
-	}
-
-	public void Remove(BuyRequestDto obj)
-	{
-		var buyRequests = _buyRequestMapper.MapperToEntity(obj);
-		_buyRequestService.Remove(buyRequests);
-	}
+    public async Task<BuyRequest> Remove(Guid id)
+    {
+        var response = await _buyRequestService.Remove(id);
+        return response;
+    }
 }

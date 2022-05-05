@@ -1,87 +1,134 @@
-﻿using FinancialApp.Application.Interface;
+﻿using AutoMapper;
+using FinancialApp.Application.Interface;
+using FinancialApp.Domain.Models;
+using FinancialApp.Domain.Models.Validations;
 using FinancialApp.DTO.DTO;
+using FinancialApp.Shared.Controller;
+using FinancialApp.Shared.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
-namespace FinancialApp.API.Document.Controllers
+namespace FinancialApp.API.Document.Controllers;
+
+[Route("api/[controller]")]
+public class DocumentController : ApiControllerBase
 {
-	[ApiController]
-	[Route("api/[controller]")]
-	public class DocumentController : Controller
-	{
-		private readonly IApplicationDocumentService _applicationDocumentService;
+    private readonly ILogger<DocumentController> _logger;
+    private readonly IApplicationDocumentService _applicationDocumentService;
 
-		public DocumentController(IApplicationDocumentService applicationDocumentService)
-		{
-			_applicationDocumentService = applicationDocumentService;
-		}
+    public DocumentController(
+        IApplicationDocumentService applicationDocumentService,
+        ILogger<DocumentController> logger,
+        IServiceContext context) : base(context)
+    {
+        _logger = logger;
+        _applicationDocumentService = applicationDocumentService;
+    }
 
-		[HttpGet]
-		public ActionResult<List<string>> Get()
-		{
-			return Ok(_applicationDocumentService.GetAll());
-		}
+    /// <summary>
+    /// Calls Page(int) of 10 Documents in Data base
+    /// </summary>
+    /// <returns>Page(int) of 10 Documents in Data base</returns>
+    /// <response code="200">Success response</response>
+    /// <response code="400">
+    /// When a request error occurs but a message reporting the error is returned
+    /// </response>
+    [HttpGet("page/{page}")]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(400)]
+    public async Task<ActionResult<string>> Get([FromRoute] int page)
+    {
+        var result = await _applicationDocumentService.GetAll(page);
+        if(result != null)
+            return Ok(result);
+        return NoContent();
+    }
 
-		[HttpGet("page/{page}")]
-		public ActionResult<string> Get(int page)
-		{
-			return Ok(_applicationDocumentService.GetByPage(page));
-		}
+    /// <summary>
+    /// Gets Document in Data base with ID indicated
+    /// </summary>
+    /// <returns>Document in Data base with ID indicated</returns>
+    /// <response code="200">Success response</response>
+    /// <response code="400">
+    /// When a request error occurs but a message reporting the error is returned
+    /// </response>
+    [HttpGet("{id}")]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(400)]
+    public async Task<ActionResult<string>> Get([FromRoute] Guid id)
+    {
+        var result = await _applicationDocumentService.GetById(id);
+        if(result != null)
+            return Ok(result);
+        return NoContent();
+    }
 
-		[HttpGet("{id}")]
-		public ActionResult<string> Get(Guid id)
-		{
-			return Ok(_applicationDocumentService.GetById(id));
-		}
+    /// <summary>
+    /// Send a Document
+    /// </summary>
+    /// <returns>
+    /// if have errors in validation indicates that if not return errors null and the Document inserted
+    /// </returns>
+    /// <response code="200">Success response</response>
+    /// <response code="400">
+    /// When a request error occurs but a message reporting the error is returned
+    /// </response>
+    [HttpPost]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(400)]
+    public async Task<IActionResult> Post([FromBody] DocumentDto documentDto)
+    {
+        return ServiceResponse(await _applicationDocumentService.Add(documentDto));
+    }
 
-		[HttpPost]
-		public ActionResult Post([FromBody] DocumentDto documentDto)
-		{
-			try
-			{
-				if(documentDto == null)
-					return NotFound();
+    /// <summary>
+    /// Send a Update to Document
+    /// </summary>
+    /// <returns>
+    /// if have errors in validation indicates that if not return errors null and the Document updated
+    /// </returns>
+    /// <response code="200">Success response</response>
+    /// <response code="400">
+    /// When a request error occurs but a message reporting the error is returned
+    /// </response>
+    [HttpPut]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(400)]
+    public async Task<IActionResult> Put([FromBody] DocumentUpdateDto obj)
+    {
+        return ServiceResponse(await _applicationDocumentService.Update(obj));
+    }
 
-				_applicationDocumentService.Add(documentDto);
-				return Ok("Document successfully registered!");
-			}
-			catch(Exception ex)
-			{
-				throw ex;
-			}
-		}
+    /// <summary>
+    /// Send a Request to Delete a Document
+    /// </summary>
+    /// <returns>Document Deleted</returns>
+    /// <response code="200">Success response</response>
+    /// <response code="400">
+    /// When a request error occurs but a message reporting the error is returned
+    /// </response>
+    [HttpDelete("{id}")]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(400)]
+    public async Task<IActionResult> Delete([FromRoute] Guid id)
+    {
+        return ServiceResponse(await _applicationDocumentService.Remove(id));
+    }
 
-		[HttpPut]
-		public ActionResult Put([FromBody] DocumentDto documentDto)
-		{
-			try
-			{
-				if(documentDto == null)
-					return NotFound();
-
-				_applicationDocumentService.Update(documentDto);
-				return Ok("Document successfully updated!");
-			}
-			catch(Exception)
-			{
-				throw;
-			}
-		}
-
-		[HttpDelete()]
-		public ActionResult Delete([FromBody] DocumentDto documentDto)
-		{
-			try
-			{
-				if(documentDto == null)
-					return NotFound();
-
-				_applicationDocumentService.Remove(documentDto);
-				return Ok("Document successfully removed!");
-			}
-			catch(Exception ex)
-			{
-				throw ex;
-			}
-		}
-	}
+    /// <summary>
+    /// Send a Update to Paid of Document
+    /// </summary>
+    /// <returns>
+    /// if have errors in validation indicates that if not return null and the BuyRequest updated
+    /// </returns>
+    /// <response code="200">Success response</response>
+    /// <response code="400">
+    /// When a request error occurs but a message reporting the error is returned
+    /// </response>
+    [HttpPatch]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(400)]
+    public async Task<IActionResult> Patch([FromBody] DocumentPatchDto obj)
+    {
+        return ServiceResponse(await _applicationDocumentService.Patch(obj));
+    }
 }

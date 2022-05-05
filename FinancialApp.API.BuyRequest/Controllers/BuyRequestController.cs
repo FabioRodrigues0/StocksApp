@@ -1,93 +1,131 @@
 ﻿using FinancialApp.Application.Interface;
 using FinancialApp.DTO.DTO;
-using Microsoft.AspNetCore.JsonPatch;
+using FinancialApp.Shared.Controller;
+using FinancialApp.Shared.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal;
 
-namespace FinancialApp.API.BuyRequest.Controllers
+namespace FinancialApp.API.BuyRequest.Controllers;
+
+[Route("api/[controller]")]
+public class BuyRequestController : ApiControllerBase
 {
-	[ApiController]
-	[Route("api/[controller]")]
-	public class BuyRequestController : Controller
+	private readonly ILogger<BuyRequestController> _logger;
+	private readonly IApplicationBuyRequestService _applicationBuyRequestService;
+
+	public BuyRequestController(
+		IApplicationBuyRequestService applicationBuyRequestService,
+		ILogger<BuyRequestController> logger,
+		IServiceContext context) : base(context)
 	{
-		private readonly IApplicationBuyRequestService _applicationBuyRequestService;
+		_logger = logger;
+		_applicationBuyRequestService = applicationBuyRequestService;
+	}
 
-		public BuyRequestController(IApplicationBuyRequestService applicationBuyRequestService)
-		{
-			_applicationBuyRequestService = applicationBuyRequestService;
-		}
+	/// <summary>
+	/// Calls Page(int) of 10 BuyRequests in Data base
+	/// </summary>
+	/// <returns>Page(int) of 10 BuyRequest in Data base</returns>
+	/// <response code="200">Success response</response>
+	/// <response code="400">
+	/// When a request error occurs but a message reporting the error is returned
+	/// </response>
+	[HttpGet("page/{page}")]
+	[ProducesResponseType(200)]
+	[ProducesResponseType(400)]
+	public async Task<ActionResult<string>> Get([FromRoute] int page)
+	{
+		var result = await _applicationBuyRequestService.GetAll(page);
+		if(result != null)
+			return Ok(result);
+		return NoContent();
+	}
 
-		// GET api/values
-		[HttpGet]
-		public ActionResult<string> Get()
-		{
-			var result = _applicationBuyRequestService.GetAll();
-			if(result != null)
-				return Ok(result);
-			return NoContent();
-		}
+	/// <summary>
+	/// Gets BuyRequest in Data base with ID indicated or Client
+	/// </summary>
+	/// <returns>BuyRequest in Data base with ID indicated or Client</returns>
+	/// <response code="200">Success response</response>
+	/// <response code="400">
+	/// When a request error occurs but a message reporting the error is returned
+	/// </response>
+	[HttpGet("{id}")]
+	[ProducesResponseType(200)]
+	[ProducesResponseType(400)]
+	public async Task<ActionResult<string>> Get([FromRoute] Guid id)
+	{
+		var result = await _applicationBuyRequestService.GetById(id);
+		if(result != null)
+			return Ok(result);
+		return NoContent();
+	}
 
-		// GET api/values/5
-		[HttpGet("{id}")]
-		public ActionResult<string> Get(Guid id)
-		{
-			var result = _applicationBuyRequestService.GetById(id);
-			if(result != null)
-				return Ok(result);
-			return NoContent();
-		}
+	/// <summary>
+	/// Send a BuyRequest
+	/// </summary>
+	/// <returns>
+	/// if have errors in validation indicates that if not return errors null and the BuyRequest inserted
+	/// </returns>
+	/// <response code="200">Success response</response>
+	/// <response code="400">
+	/// When a request error occurs but a message reporting the error is returned
+	/// </response>
+	[HttpPost]
+	[ProducesResponseType(200)]
+	[ProducesResponseType(400)]
+	public async Task<IActionResult> Post([FromBody] BuyRequestDto buyRequestDto)
+	{
+		return ServiceResponse(await _applicationBuyRequestService.Add(buyRequestDto));
+	}
 
-		[HttpGet("page/{page}")]
-		public ActionResult<string> Get(int page)
-		{
-			var result = _applicationBuyRequestService.GetByPage(page);
-			if(result != null)
-				return Ok(result);
-			return NoContent();
-		}
+	/// <summary>
+	/// Send a Update to BuyRequest
+	/// </summary>
+	/// <returns>
+	/// if have errors in validation indicates that if not return errors null and the BuyRequest updated
+	/// </returns>
+	/// <response code="200">Success response</response>
+	/// <response code="400">
+	/// When a request error occurs but a message reporting the error is returned
+	/// </response>
+	[HttpPut]
+	[ProducesResponseType(200)]
+	[ProducesResponseType(400)]
+	public async Task<IActionResult> Put([FromBody] BuyRequestUpdateDto obj)
+	{
+		return ServiceResponse(await _applicationBuyRequestService.Update(obj));
+	}
 
-		// POST api/values
-		[HttpPost]
-		public async Task<ActionResult> Post([FromBody] BuyRequestDto buyRequestDto)
-		{
-			if(buyRequestDto == null)
-				return NotFound();
+	/// <summary>
+	/// Send a Update to Status of BuyRequest
+	/// </summary>
+	/// <returns>
+	/// if have errors in validation indicates that if not return null and the BuyRequest updated
+	/// </returns>
+	/// <response code="200">Success response</response>
+	/// <response code="400">
+	/// When a request error occurs but a message reporting the error is returned
+	/// </response>
+	[HttpPatch]
+	[ProducesResponseType(200)]
+	[ProducesResponseType(400)]
+	public async Task<IActionResult> Patch([FromBody] BuyRequestPatchDto obj)
+	{
+		return ServiceResponse(await _applicationBuyRequestService.Patch(obj));
+	}
 
-			await _applicationBuyRequestService.Add(buyRequestDto);
-			return Ok("Buy Request successfully registered!");
-		}
-
-		// PUT api/values/5
-		[HttpPut]
-		public ActionResult Put([FromBody] BuyRequestDto buyRequestDto)
-		{
-			if(buyRequestDto == null)
-				return NotFound();
-
-			_applicationBuyRequestService.Update(buyRequestDto);
-			return Ok("Buy Request successfully updated!");
-		}
-
-		[HttpPatch]
-		public async Task<ActionResult> Patch([FromBody] JsonPatchDocument buyRequest, Guid id)
-		{
-			var result = _applicationBuyRequestService.GetById(id);
-			if(result == null)
-				return NotFound();
-			await _applicationBuyRequestService.Patch(buyRequest, id);
-			return Ok("Buy Request successfully updated!");
-		}
-
-		// DELETE api/values/5
-		[HttpDelete]
-		public ActionResult Delete([FromBody] Guid id)
-		{
-			var result = _applicationBuyRequestService.GetById(id);
-			if(result == null)
-				return NotFound();
-
-			_applicationBuyRequestService.Remove(result);
-			return Ok("Buy Request successfully removed!");
-		}
+	/// <summary>
+	/// Send a Request to Delete a BuyRequest
+	/// </summary>
+	/// <returns>BuyRequest Deleted</returns>
+	/// <response code="200">Success response</response>
+	/// <response code="400">
+	/// When a request error occurs but a message reporting the error is returned
+	/// </response>
+	[HttpDelete("{id}")]
+	[ProducesResponseType(200)]
+	[ProducesResponseType(400)]
+	public async Task<IActionResult> Delete([FromRoute] Guid id)
+	{
+		return ServiceResponse(await _applicationBuyRequestService.Remove(id));
 	}
 }

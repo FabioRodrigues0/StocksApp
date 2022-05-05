@@ -1,59 +1,25 @@
-﻿using FinacialApp.Domain.Models;
+﻿using System.Security.Cryptography.X509Certificates;
+using FinancialApp.Domain.Models.Validations;
 using FinancialApp.Shared;
+using FinancialApp.Shared.Enums;
 
 namespace FinancialApp.Domain.Models;
 
-public class BuyRequest : BaseModel
+public class BuyRequest : EntityBase<BuyRequest>
 {
-	public readonly BuyRequestProducts BuyRequestProducts;
-
-	public BuyRequest()
+	public override bool IsValid()
 	{
+		if(ValidationResult == null)
+		{
+			var validator = new BuyRequestValidations();
+			ValidationResult = validator.Validate(this);
+		}
+		return ValidationResult?.IsValid != false;
 	}
 
-	public BuyRequest(long code,
-										DateTimeOffset deliveryDate,
-										Guid client,
-										string clientDescription,
-										string clientEmail,
-										string clientPhone,
-										Status status,
-										string street,
-										string number,
-										string sector,
-										string complement,
-										string city,
-										string state,
-										decimal discount,
-										List<BuyRequestProducts> products)
-	{
-		Id = Guid.NewGuid();
-		Code = code;
-		Date = DateTimeOffset.Now;
-		DeliveryDate = deliveryDate;
-		Client = client;
-		ClientDescription = clientDescription;
-		ClientEmail = clientEmail;
-		ClientPhone = clientPhone;
-		Status = Status.Received;
-		Street = street;
-		Number = number;
-		Sector = sector;
-		Complement = complement;
-		City = city;
-		State = state;
-		Discount = discount;
-		if(BuyRequestProducts != null) Cost = BuyRequestProducts.Total;
-		Products = products.ToList();
-		if(BuyRequestProducts != null) ProductValor = BuyRequestProducts.Total;
-		TotalValor = ProductValor - Discount;
-	}
-
-	public Guid Id { get; set; }
 	public long Code { get; set; }
 	public DateTimeOffset Date { get; set; }
 	public DateTimeOffset DeliveryDate { get; set; }
-	public List<BuyRequestProducts> Products { get; set; }
 	public Guid Client { get; set; }
 	public string ClientDescription { get; set; }
 	public string ClientEmail { get; set; }
@@ -66,7 +32,8 @@ public class BuyRequest : BaseModel
 	public string City { get; set; }
 	public string State { get; set; }
 	public decimal Discount { get; set; }
-	public decimal Cost { get; set; }
 	public decimal ProductValor { get; set; }
+	public decimal Cost { get; set; }
 	public decimal TotalValor { get; set; }
+	public List<BuyRequestProducts> Products { get; set; }
 }

@@ -1,28 +1,26 @@
-﻿using FinancialApp.Shared;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using FinancialApp.Domain.Models.Validations;
+using FinancialApp.Shared;
+using FinancialApp.Shared.Enums;
 
-namespace FinacialApp.Domain.Models;
+namespace FinancialApp.Domain.Models;
 
-public class CashBook : BaseModel
+public class CashBook : EntityBase<CashBook>
 {
-	public CashBook()
+	public override bool IsValid()
 	{
+		if(ValidationResult == null)
+		{
+			var validator = new CashBookValidations();
+			ValidationResult = validator.Validate(this);
+		}
+
+		return ValidationResult?.IsValid != false;
 	}
 
-	public CashBook(Origin origin, Guid originId, string description, StatusCashBook type, decimal valor)
-	{
-		Id = Guid.NewGuid();
-		Origin = origin;
-		OriginId = originId;
-		Description = description;
-		Type = type;
-		Valor = valor;
-	}
-
-	public Guid Id { get; set; }
 	public Origin Origin { get; set; }
 	public Guid OriginId { get; set; }
 	public string Description { get; set; }
 	public StatusCashBook Type { get; set; }
 	public decimal Valor { get; set; }
+	public bool IsEdited { get; set; } = false;
 }

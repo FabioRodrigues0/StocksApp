@@ -1,106 +1,130 @@
-﻿using FinacialApp.Domain.Models;
-using FinancialApp.Data.Repositories;
+﻿using System.Net.Http.Json;
 using FinancialApp.Domain.Core.Repositories;
+using FinancialApp.Domain.Models;
 using FinancialApp.DTO.DTO;
 using FinancialApp.Shared;
+using FinancialApp.Shared.Enums;
 using Microsoft.EntityFrameworkCore;
-using System.Net.Http.Json;
-using FinancialApp.Domain.Models;
 
-namespace FinancialApp.Data;
+namespace FinancialApp.Data.Repositories;
 
 public class BuyRequestRepository : RepositoryBase<BuyRequest>, IBuyRequestRepository
 {
 	private readonly HttpClient _http;
+	private readonly IBuyRequestProductsRepository _productsRepository;
 
-	public BuyRequestRepository(DataContext context, HttpClient http) : base(context)
+	public BuyRequestRepository(DataContext context, HttpClient http, IBuyRequestProductsRepository productsRepository) : base(context)
 	{
 		_http = http;
-		dbSet.Include(i => i.Products);
+		_productsRepository = productsRepository;
+		SetInclude(x => x.Include(z => z.Products));
 	}
 
-	public async Task<BuyRequest> GetById(Guid id)
+	public override async Task<BuyRequest> Add(BuyRequest obj)
 	{
-		var resultClient = await dbSet.Where(br => br.Client == id).FirstOrDefaultAsync();
-		var resultId = await dbSet.FindAsync(id);
-
-		if(resultId != null)
-			return resultId;
-		else
-			return resultClient;
-	}
-
-	public override async Task Add(BuyRequest obj)
-	{
-		try
+		dbSet.AddAsync(obj);
+		await _dataContext.SaveChangesAsync();
+		if(Status.Finished.Equals(obj.Status))
 		{
-			await base.Add(obj);
-			if(Status.Finished.Equals(obj.Status))
+			var result = new CashBookDto
 			{
-				var result = new CashBookDto()
-				{
-					Origin = Origin.BuyRequest,
-					OriginId = obj.Id,
-					Description = "Buy Request nº" + obj.Code,
-					Type = StatusCashBook.Payment,
-					Valor = obj.TotalValor
-				};
-				await _http.PostAsJsonAsync("https://localhost:7063/api/CashBook", result);
-			}
+				Origin = Origin.BuyRequest,
+				OriginId = obj.Id,
+				Description = "Buy Request nº" + obj.Code,
+				Type = StatusCashBook.Payment,
+				Valor = obj.TotalValor,
+				IsEdited = true
+			};
+			await _http.PostAsJsonAsync("https://localhost:7063/api/CashBook", result);
 		}
-		catch(Exception e)
-		{
-			throw e;
-		}
+		return obj;
 	}
 
-	public override async Task Remove(BuyRequest obj)
+	public override async Task<BuyRequest> Remove(Guid id)
 	{
-		try
+		var result = await dbSet
+			.Where(x => x.Id == id)
+			.AsNoTracking()
+			.FirstOrDefaultAsync();
+		await base.Remove(id);
+		if(result.Status == Status.Finished)
 		{
-			await base.Remove(obj);
-			if(obj.Status == Status.Finished)
+			var cashBook = new CashBookDto
 			{
-				var result = new CashBook()
-				{
-					Id = Guid.NewGuid(),
-					Origin = Origin.BuyRequest,
-					OriginId = obj.Id,
-					Description = "Buy Request nº" + obj.Code,
-					Type = StatusCashBook.Reversal,
-					Valor = obj.TotalValor
-				};
-				await _http.PostAsJsonAsync("https://localhost:7063/api/CashBook", result);
-			}
+				Origin = Origin.BuyRequest,
+				OriginId = result.Id,
+				Description = "Buy Request nº" + result.Code,
+				Type = StatusCashBook.Reversal,
+				Valor = result.TotalValor,
+				IsEdited = true
+			};
+			await _http.PostAsJsonAsync("https://localhost:7063/api/CashBook", cashBook);
 		}
-		catch(Exception ex)
-		{
-			throw ex;
-		}
+
+		return result;
 	}
 
-	public override async Task Update(BuyRequest obj)
+	public override async Task<BuyRequest> Update(BuyRequest obj)
 	{
-		try
+		var result = await dbSet
+			.Where(x => x.Id == obj.Id)
+			.Include(i => i.Products)
+			.AsNoTracking()
+			.FirstOrDefaultAsync();
+
+		var productsIds = obj.Products.Select(s => s.Id).ToList();
+		var productsToDelete = result.Products.Where(w => !productsIds.Contains(w.Id)).ToList();
+		foreach(var produto in productsToDelete)
 		{
-			await base.Update(obj);
-			if(obj.Status == Status.Finished)
+			await _productsRepository.Remove(produto.Id);
+		}
+
+		await base.Update(obj);
+		if(obj.Status == Status.Finished)
+		{
+			var cashBook = new CashBookDto
 			{
-				var result = new CashBook()
-				{
-					Id = Guid.NewGuid(),
-					Origin = Origin.BuyRequest,
-					OriginId = obj.Id,
-					Description = "Buy Request nº" + obj.Code,
-					Type = StatusCashBook.Reversal,
-					Valor = obj.TotalValor
-				};
-				await _http.PostAsJsonAsync("https://localhost:7063/api/CashBook", result);
-			}
+				Origin = Origin.BuyRequest,
+				OriginId = obj.Id,
+				Description = "Buy Request nº" + obj.Code,
+				Type = StatusCashBook.Reversal,
+				Valor = obj.TotalValor - result.TotalValor,
+				IsEdited = true
+			};
+			await _http.PostAsJsonAsync("https://localhost:7063/api/CashBook", cashBook);
 		}
-		catch(Exception ex)
+		return obj;
+	}
+
+	public virtual async Task<BuyRequest> Patch(BuyRequest obj)
+	{
+		var result = await dbSet
+			.Where(x => x.Id == obj.Id)
+			.AsNoTracking()
+			.FirstOrDefaultAsync();
+		result.Status = obj.Status;
+		await base.Patch(result);
+		if(obj.Status == Status.Finished)
 		{
-			throw ex;
+			var cashBook = new CashBookDto
+			{
+				Origin = Origin.BuyRequest,
+				OriginId = result.Id,
+				Description = "Buy Request nº" + result.Code,
+				Type = StatusCashBook.Reversal,
+				Valor = result.TotalValor,
+				IsEdited = true
+			};
+			await _http.PostAsJsonAsync("https://localhost:7063/api/CashBook", cashBook);
 		}
+		return result;
+	}
+
+	public override async Task<BuyRequest> GetById(Guid id)
+	{
+		var query = dbSet.Where(br => br.Client == id || br.Id == id);
+		if(Include != null)
+			query = Include(query);
+		return await query.AsNoTracking().FirstOrDefaultAsync();
 	}
 }

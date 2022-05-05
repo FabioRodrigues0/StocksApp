@@ -1,22 +1,18 @@
-﻿using FinancialApp.DTO.DTO;
+﻿using FinancialApp.Domain.Models;
+using FinancialApp.DTO.DTO;
 using Microsoft.AspNetCore.JsonPatch;
-using Microsoft.AspNetCore.Mvc;
 
 namespace FinancialApp.Application.Interface;
 
 public interface IApplicationCashBookService
 {
-	Task Add(CashBookDto obj);
+    Task<CashBook> Add(CashBookDto obj);
 
-	CashBookDto GetById(Guid id);
+    Task<CashBookDto> GetById(Guid id);
 
-	PagesCashBookDto GetByPage(int page);
+    Task<List<CashBookDto>> GetByOriginId(Guid id);
 
-	PagesCashBookDto GetAll();
+    Task<PagesCashBookDto> GetAll(int page);
 
-	void Update(CashBookDto obj);
-
-	Task Patch(JsonPatchDocument obj, Guid id);
-
-	void Remove(CashBookDto obj);
+    Task<CashBook> Update(CashBookUpdateDto obj);
 }

@@ -1,12 +1,17 @@
-using FinacialApp.Domain.Models;
+global using FinancialApp.Domain.Models;
+using Autofac.Extensions.DependencyInjection;
+using AutoMapper;
 using FinancialApp.Application.Interface;
 using FinancialApp.Application.Service;
-using FinancialApp.CrossCutting.Adapter.Interfaces;
 using FinancialApp.CrossCutting.Adapter.Map;
 using FinancialApp.Data;
+using FinancialApp.Data.Repositories;
 using FinancialApp.Domain.Core.Repositories;
 using FinancialApp.Domain.Core.Services;
+using FinancialApp.Domain.Models.Validations;
 using FinancialApp.Domain.Services.Services;
+using FinancialApp.Shared;
+using FinancialApp.Shared.Interfaces;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
@@ -14,7 +19,6 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers().AddFluentValidation(fv =>
 {
 	fv.RegisterValidatorsFromAssemblyContaining<DocumentValidations>();
@@ -29,10 +33,19 @@ builder.Services.AddDbContext<DataContext>(options =>
 	options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
+builder.Services.AddAutoMapper(typeof(Program));
+var config = new MapperConfiguration(cfg =>
+{
+	cfg.AddProfile(new DocumentAutoMapper());
+	cfg.AddProfile(new PagesDocumentMapper());
+});
+var mapper = config.CreateMapper();
+builder.Services.AddSingleton(mapper);
+
 builder.Services.AddScoped<IApplicationDocumentService, ApplicationDocumentService>();
 builder.Services.AddScoped<IDocumentService, DocumentService>();
 builder.Services.AddScoped<IDocumentRepository, DocumentRepository>();
-builder.Services.AddScoped<IDocumentMapper, DocumentMapper>();
+builder.Services.AddScoped<IServiceContext, ServiceContext>();
 builder.Services.AddHttpClient();
 
 var app = builder.Build();

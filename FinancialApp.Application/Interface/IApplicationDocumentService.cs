@@ -1,18 +1,19 @@
-﻿using FinancialApp.DTO.DTO;
+﻿using FinancialApp.Domain.Models;
+using FinancialApp.DTO.DTO;
 
 namespace FinancialApp.Application.Interface;
 
 public interface IApplicationDocumentService
 {
-	void Add(DocumentDto obj);
+    Task<Document> Add(DocumentDto obj);
 
-	DocumentDto GetById(Guid id);
+    Task<DocumentDto> GetById(Guid id);
 
-	PagesDocumentDto GetByPage(int page);
+    Task<PagesDocumentDto> GetAll(int page);
 
-	PagesDocumentDto GetAll();
+    Task<Document> Update(DocumentUpdateDto obj);
 
-	void Update(DocumentDto obj);
+    Task<Document> Patch(DocumentPatchDto obj);
 
-	void Remove(DocumentDto obj);
+    Task<Document> Remove(Guid id);
 }

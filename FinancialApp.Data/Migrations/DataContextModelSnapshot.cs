@@ -22,109 +22,6 @@ namespace FinancialApp.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("FinacialApp.Domain.Models.BuyRequestProducts", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("BuyRequestId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("ProductCategory")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ProductDescription")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("ProductId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<decimal>("Quantity")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("Total")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("Valor")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BuyRequestId");
-
-                    b.ToTable("BuyRequestProducts");
-                });
-
-            modelBuilder.Entity("FinacialApp.Domain.Models.CashBook", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Origin")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("OriginId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("Type")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("Valor")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("CashBooks");
-                });
-
-            modelBuilder.Entity("FinacialApp.Domain.Models.Document", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTimeOffset>("Date")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<DateTimeOffset>("DatePaidOut")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Number")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Observation")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Operation")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("Total")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("TypeDocument")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("isPaid")
-                        .HasColumnType("bit");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Documents");
-                });
-
             modelBuilder.Entity("FinancialApp.Domain.Models.BuyRequest", b =>
                 {
                     b.Property<Guid>("Id")
@@ -199,7 +96,113 @@ namespace FinancialApp.Data.Migrations
                     b.ToTable("BuyRequests");
                 });
 
-            modelBuilder.Entity("FinacialApp.Domain.Models.BuyRequestProducts", b =>
+            modelBuilder.Entity("FinancialApp.Domain.Models.BuyRequestProducts", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("BuyRequestId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("ProductCategory")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ProductDescription")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("Quantity")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Total")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Valor")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BuyRequestId");
+
+                    b.ToTable("BuyRequestProducts");
+                });
+
+            modelBuilder.Entity("FinancialApp.Domain.Models.CashBook", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsEdited")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("Origin")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("OriginId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Valor")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CashBooks");
+                });
+
+            modelBuilder.Entity("FinancialApp.Domain.Models.Document", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset>("Date")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("DocumentType")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Number")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Observation")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Operation")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Paid")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset>("PaymentDate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<decimal>("Total")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Documents");
+                });
+
+            modelBuilder.Entity("FinancialApp.Domain.Models.BuyRequestProducts", b =>
                 {
                     b.HasOne("FinancialApp.Domain.Models.BuyRequest", "BuyRequest")
                         .WithMany("Products")

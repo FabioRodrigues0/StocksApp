@@ -1,84 +1,88 @@
-﻿using FinacialApp.Shared;
-using FinancialApp.Shared;
+﻿using FinancialApp.Shared;
+using FinancialApp.Shared.Interfaces;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace FinancialApp.Data.Repositories;
 
-public class RepositoryBase<TEntity> : IRepositoryBase<TEntity> where TEntity : class
+public class RepositoryBase<T> : IRepositoryBase<T> where T : EntityBase<T>
 {
-	private readonly DataContext _dataContext;
-	protected readonly DbSet<TEntity> dbSet;
+    protected readonly DataContext _dataContext;
+    protected readonly DbSet<T> dbSet;
+    protected Func<IQueryable<T>, IIncludableQueryable<T, object>> Include;
 
-	public RepositoryBase(DataContext dataContext)
-	{
-		_dataContext = dataContext;
-		dbSet = _dataContext.Set<TEntity>();
-	}
+    public RepositoryBase(DataContext dataContext)
+    {
+        _dataContext = dataContext;
+        dbSet = _dataContext.Set<T>();
+    }
 
-	public virtual async Task Add(TEntity obj)
-	{
-		try
-		{
-			await dbSet.AddAsync(obj);
-			await _dataContext.SaveChangesAsync();
-		}
-		catch(Exception e)
-		{
-			Console.WriteLine(e);
-			throw;
-		}
-	}
+    public virtual void SetInclude(Func<IQueryable<T>, IIncludableQueryable<T, object>> include)
+    {
+        Include = include;
+    }
 
-	public List<TEntity> GetByPage(int page)
-	{
-		const float pageResults = 10f;
+    public virtual async Task<T> Add(T obj)
+    {
+        try
+        {
+            await dbSet.AddAsync(obj);
+            await _dataContext.SaveChangesAsync();
+        }
+        catch(Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+        return obj;
+    }
 
-		return dbSet
-			.Skip((page - 1) * dbSet.Count())
-			.Take((int)pageResults)
-			.ToList();
-	}
+    public virtual async Task<List<T>> GetAll()
+    {
+        var query = dbSet
+            .AsNoTracking();
 
-	public List<TEntity> GetAll()
-	{
-		return dbSet.ToList();
-	}
+        if(Include != null)
+            query = Include(query);
 
-	public virtual List<TEntity> GetProducts()
-	{
-		return dbSet.ToList();
-	}
+        return await query.ToListAsync();
+    }
 
-	public TEntity GetById(Guid id)
-	{
-		return dbSet.Find(id);
-	}
+    public virtual async Task<T> GetById(Guid id)
+    {
+        var query = dbSet
+            .Where(br => br.Id == id)
+            .AsNoTracking();
 
-	public virtual async Task Remove(TEntity obj)
-	{
-		dbSet.Remove(obj);
-		await _dataContext.SaveChangesAsync();
-	}
+        if(Include != null)
+            query = Include(query);
 
-	public virtual async Task Update(TEntity obj)
-	{
-		try
-		{
-			_dataContext.Entry(obj).State = EntityState.Modified;
-			await _dataContext.SaveChangesAsync();
-		}
-		catch(Exception ex)
-		{
-			throw ex;
-		}
-	}
+        return await query.FirstOrDefaultAsync();
+    }
 
-	public virtual async Task Patch(JsonPatchDocument obj, Guid id)
-	{
-		var result = await dbSet.FindAsync(id);
-		if(result != null)
-			obj.ApplyTo(result);
-		await _dataContext.SaveChangesAsync();
-	}
+    public virtual async Task<T> Remove(Guid id)
+    {
+        var result = await dbSet
+            .Where(x => x.Id == id)
+            .AsNoTracking()
+            .FirstOrDefaultAsync();
+        dbSet.Remove(result);
+        await _dataContext.SaveChangesAsync();
+        return result;
+    }
+
+    public virtual async Task<T> Update(T obj)
+    {
+        dbSet.Update(obj);
+        await _dataContext.SaveChangesAsync();
+        return obj;
+    }
+
+    public virtual async Task<T> Patch(T obj)
+    {
+        dbSet.Update(obj);
+        await _dataContext.SaveChangesAsync();
+        return obj;
+    }
 }

@@ -1,21 +1,20 @@
-﻿using FinancialApp.DTO.DTO;
+﻿using FinancialApp.Domain.Models;
+using FinancialApp.DTO.DTO;
 using Microsoft.AspNetCore.JsonPatch;
 
 namespace FinancialApp.Application.Interface;
 
 public interface IApplicationBuyRequestService
 {
-	Task Add(BuyRequestDto obj);
+    Task<BuyRequest> Add(BuyRequestDto obj);
 
-	BuyRequestDto GetById(Guid id);
+    Task<BuyRequestDto> GetById(Guid id);
 
-	PagesBuyRequestDto GetByPage(int page);
+    Task<PagesBuyRequestDto> GetAll(int page);
 
-	PagesBuyRequestDto GetAll();
+    Task<BuyRequest> Update(BuyRequestUpdateDto obj);
 
-	void Update(BuyRequestDto obj);
+    Task<BuyRequest> Patch(BuyRequestPatchDto obj);
 
-	Task Patch(JsonPatchDocument obj, Guid id);
-
-	void Remove(BuyRequestDto obj);
+    Task<BuyRequest> Remove(Guid id);
 }

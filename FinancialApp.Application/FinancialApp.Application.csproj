@@ -1,21 +1,21 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="11.0.1" />
-    <PackageReference Include="Microsoft.AspNetCore.JsonPatch" Version="6.0.4" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="AutoMapper" Version="11.0.1"/>
+        <PackageReference Include="Microsoft.AspNetCore.JsonPatch" Version="6.0.4"/>
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5"/>
+    </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\FinancialApp.CrossCutting.Adapter\FinancialApp.CrossCutting.Adapter.csproj" />
-    <ProjectReference Include="..\FinancialApp.Domain.Core\FinancialApp.Domain.Core.csproj" />
-    <ProjectReference Include="..\FinancialApp.DTO\FinancialApp.DTO.csproj" />
-  </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\FinancialApp.CrossCutting.Adapter\FinancialApp.CrossCutting.Adapter.csproj"/>
+        <ProjectReference Include="..\FinancialApp.Domain.Core\FinancialApp.Domain.Core.csproj"/>
+        <ProjectReference Include="..\FinancialApp.DTO\FinancialApp.DTO.csproj"/>
+    </ItemGroup>
 
 </Project>

@@ -1,0 +1,34 @@
+﻿using System;
+using Bogus;
+using FinancialApp.Domain.Models;
+using FinancialApp.Shared;
+using FinancialApp.Shared.Enums;
+
+namespace FinancialApp.Tests.BuyRequestTest;
+
+public class BuyRequestFaker
+{
+	public static Faker<BuyRequestProducts> buyRequestProducts = new Faker<BuyRequestProducts>()
+		.RuleFor(x => x.Id, Guid.NewGuid)
+		.RuleFor(x => x.ProductId, Guid.NewGuid)
+		.RuleFor(x => x.ProductDescription, x => x.Random.String(1, 256))
+		.RuleFor(x => x.ProductCategory, x => x.PickRandom<ProductCategory>())
+		.RuleFor(x => x.Quantity, x => x.Random.Int(1, 3))
+		.RuleFor(x => x.Valor, x => x.Random.Decimal(1, 30));
+
+	public BuyRequest buyRequest = new Faker<BuyRequest>()
+		.RuleFor(x => x.Id, Guid.NewGuid)
+		.RuleFor(x => x.Code, x => x.Random.Number(1, 50000))
+		.RuleFor(x => x.Date, DateTimeOffset.Now)
+		.RuleFor(x => x.DeliveryDate, DateTimeOffset.Now.AddDays(6))
+		.RuleFor(x => x.Client, Guid.NewGuid)
+		.RuleFor(x => x.ClientDescription, x => x.Random.String(1, 256))
+		.RuleFor(x => x.ClientEmail, x => x.Person.Email)
+		.RuleFor(x => x.ClientEmail, x => x.Person.Phone)
+		.RuleFor(x => x.Status, x => x.PickRandom<Status>())
+		.RuleFor(x => x.Discount, 0)
+		.RuleFor(x => x.Cost, 0)
+		.RuleFor(x => x.ProductValor, 0)
+		.RuleFor(x => x.TotalValor, 0)
+		.RuleFor(x => x.Products, x => buyRequestProducts.GenerateBetween(1, 3));
+}

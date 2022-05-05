@@ -1,70 +1,68 @@
 ﻿using AutoMapper;
-using FinacialApp.Domain.Models;
 using FinancialApp.Application.Interface;
-using FinancialApp.CrossCutting.Adapter.Interfaces;
 using FinancialApp.Domain.Core.Services;
+using FinancialApp.Domain.Models;
 using FinancialApp.DTO.DTO;
 using Microsoft.AspNetCore.JsonPatch;
-using Microsoft.AspNetCore.Mvc;
 
 namespace FinancialApp.Application.Service;
 
 public class ApplicationCashBookService : IApplicationCashBookService
 {
 	private readonly ICashBookService _cashBookService;
-	private readonly ICashBookMapper _cashBookMapper;
+	private readonly IMapper _mapper;
 
-	public ApplicationCashBookService(ICashBookService cashBookService, ICashBookMapper cashBookMapper)
+	public ApplicationCashBookService(ICashBookService cashBookService, IMapper mapper)
 
 	{
 		_cashBookService = cashBookService;
-		_cashBookMapper = cashBookMapper;
+		_mapper = mapper;
 	}
 
-	public async Task Add(CashBookDto obj)
+	public async Task<CashBook> Add(CashBookDto obj)
 	{
-		var cashBook = _cashBookMapper.MapperToEntity(obj);
-		await _cashBookService.Add(cashBook);
+		var result = _mapper.Map<CashBook>(obj);
+		var response = await _cashBookService.Add(result);
+		return response;
 	}
 
-	public CashBookDto GetById(Guid id)
+	public async Task<CashBookDto> GetById(Guid id)
 	{
-		var cashBooks = _cashBookService.GetById(id);
-		var cashBookDto = _cashBookMapper.MapperToDTO(cashBooks);
+		var cashBooks = await _cashBookService.GetById(id);
+		var cashBookDto = _mapper.Map<CashBookDto>(cashBooks);
 
 		return cashBookDto;
 	}
 
-	public PagesCashBookDto GetByPage(int page)
+	public async Task<List<CashBookDto>> GetByOriginId(Guid id)
 	{
-		var cashBooks = _cashBookService.GetByPage(page);
-		var cashBookDto = _cashBookMapper.MapperListCashBook(cashBooks, page);
+		var cashBooks = await _cashBookService.GetByOriginId(id);
+		var cashBookDto = _mapper.Map<List<CashBookDto>>(cashBooks);
 
 		return cashBookDto;
 	}
 
-	public PagesCashBookDto GetAll()
+	public async Task<PagesCashBookDto> GetAll(int page)
 	{
-		var cashBooks = _cashBookService.GetAll();
-		var cashBookDto = _cashBookMapper.MapperListCashBook(cashBooks, 1);
+		var pages = new PagesCashBookDto();
+		const int pageResults = 10;
 
-		return cashBookDto;
+		var cashBooks = await _cashBookService.GetAll();
+		var result = cashBooks.Skip((page - 1) * pageResults).Take(pageResults).ToList();
+
+		var toPages = _mapper.Map<List<CashBookDto>>(result);
+		pages = _mapper.Map<PagesCashBookDto>(toPages);
+
+		pages.CurrentPage = page;
+		pages.Pages = (int)Math.Ceiling(cashBooks.Count() / 10f);
+
+		return pages;
 	}
 
-	public void Update(CashBookDto obj)
+	public async Task<CashBook> Update(CashBookUpdateDto obj)
 	{
-		var cashBook = _cashBookMapper.MapperToEntity(obj);
-		_cashBookService.Update(cashBook);
-	}
-
-	public Task Patch(JsonPatchDocument obj, Guid id)
-	{
-		return _cashBookService.Patch(obj, id);
-	}
-
-	public void Remove(CashBookDto obj)
-	{
-		var cashBook = _cashBookMapper.MapperToEntity(obj);
-		_cashBookService.Remove(cashBook);
+		var result = _mapper.Map<CashBook>(obj);
+		var response = await _cashBookService.Update(result);
+		return response;
 	}
 }

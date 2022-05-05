@@ -1,61 +1,70 @@
-﻿using FinancialApp.Application.Interface;
-using FinancialApp.CrossCutting.Adapter.Interfaces;
+﻿using AutoMapper;
+using FinancialApp.Application.Interface;
 using FinancialApp.Domain.Core.Services;
+using FinancialApp.Domain.Models;
 using FinancialApp.DTO.DTO;
 
 namespace FinancialApp.Application.Service;
 
 public class ApplicationDocumentService : IApplicationDocumentService
 {
-	private readonly IDocumentService _documentService;
-	private readonly IDocumentMapper _documentMapper;
+    private readonly IDocumentService _documentService;
+    private readonly IMapper _mapper;
 
-	public ApplicationDocumentService(IDocumentService documentService,
-																		IDocumentMapper documentMapper)
-	{
-		_documentService = documentService;
-		_documentMapper = documentMapper;
-	}
+    public ApplicationDocumentService(IDocumentService documentService, IMapper mapper)
+    {
+        _documentService = documentService;
+        _mapper = mapper;
+    }
 
-	public void Add(DocumentDto obj)
-	{
-		var documents = _documentMapper.MapperToEntity(obj);
-		_documentService.Add(documents);
-	}
+    public async Task<Document> Add(DocumentDto obj)
+    {
+        var documents = _mapper.Map<Document>(obj);
+        var response = await _documentService.Add(documents);
+        return response;
+    }
 
-	public DocumentDto GetById(Guid id)
-	{
-		var documents = _documentService.GetById(id);
-		var documentDto = _documentMapper.MapperToDTO(documents);
+    public async Task<DocumentDto> GetById(Guid id)
+    {
+        var documents = await _documentService.GetById(id);
+        var documentDto = _mapper.Map<DocumentDto>(documents);
 
-		return documentDto;
-	}
+        return documentDto;
+    }
 
-	public PagesDocumentDto GetByPage(int page)
-	{
-		var documents = _documentService.GetByPage(page);
-		var documentDto = _documentMapper.MapperListDocument(documents, page);
+    public async Task<PagesDocumentDto> GetAll(int page)
+    {
+        var pages = new PagesDocumentDto();
+        const int pageResults = 10;
 
-		return documentDto;
-	}
+        var documents = await _documentService.GetAll();
+        var result = documents.Skip((page - 1) * pageResults).Take(pageResults).ToList();
 
-	public PagesDocumentDto GetAll()
-	{
-		var documents = _documentService.GetAll();
-		var documentDto = _documentMapper.MapperListDocument(documents, 1);
+        var toPages = _mapper.Map<List<DocumentDto>>(result);
+        pages = _mapper.Map<PagesDocumentDto>(toPages);
 
-		return documentDto;
-	}
+        pages.CurrentPage = page;
+        pages.Pages = (int)Math.Ceiling(documents.Count() / 10f);
 
-	public void Update(DocumentDto obj)
-	{
-		var document = _documentMapper.MapperToEntity(obj);
-		_documentService.Update(document);
-	}
+        return pages;
+    }
 
-	public void Remove(DocumentDto obj)
-	{
-		var document = _documentMapper.MapperToEntity(obj);
-		_documentService.Remove(document);
-	}
+    public async Task<Document> Update(DocumentUpdateDto obj)
+    {
+        var result = _mapper.Map<Document>(obj);
+        var response = await _documentService.Update(result);
+        return response;
+    }
+
+    public async Task<Document> Patch(DocumentPatchDto obj)
+    {
+        var result = _mapper.Map<Document>(obj);
+        var response = await _documentService.Patch(result);
+        return response;
+    }
+
+    public async Task<Document> Remove(Guid id)
+    {
+        return await _documentService.Remove(id);
+    }
 }

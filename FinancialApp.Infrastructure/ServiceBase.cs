@@ -1,55 +1,70 @@
-﻿using FinacialApp.Shared;
-using FinancialApp.Shared;
+﻿using FinancialApp.Shared.Interfaces;
+using FluentValidation.Results;
 using Microsoft.AspNetCore.JsonPatch;
 
 namespace FinancialApp.Shared;
 
-public abstract class ServiceBase<TEntity> : IServiceBase<TEntity> where TEntity : class
+public abstract class ServiceBase<T> : IServiceBase<T> where T : EntityBase<T>
 {
-	private readonly IRepositoryBase<TEntity> _TEntityRepository;
+	private readonly IRepositoryBase<T> _tEntityRepository;
+	protected readonly IServiceContext _serviceContext;
 
-	public ServiceBase(IRepositoryBase<TEntity> tEntityRepository)
+	protected ServiceBase(
+		IRepositoryBase<T> tEntityRepository,
+		IServiceContext serviceContext)
 	{
-		_TEntityRepository = tEntityRepository;
+		_serviceContext = serviceContext;
+		_tEntityRepository = tEntityRepository;
 	}
 
-	public virtual async Task Add(TEntity obj)
+	public virtual async Task<T> Add(T obj)
 	{
-		await _TEntityRepository.Add(obj);
+		return await _tEntityRepository.Add(obj);
 	}
 
-	public List<TEntity> GetProducts()
+	public virtual async Task<T> GetById(Guid id)
 	{
-		return _TEntityRepository.GetProducts();
+		return await _tEntityRepository.GetById(id);
 	}
 
-	public virtual TEntity GetById(Guid id)
+	public virtual async Task<List<T>> GetAll()
 	{
-		return _TEntityRepository.GetById(id);
+		return await _tEntityRepository.GetAll();
 	}
 
-	public List<TEntity> GetByPage(int page)
+	public virtual async Task<T> Update(T obj)
 	{
-		return _TEntityRepository.GetByPage(page);
+		return await _tEntityRepository.Update(obj);
 	}
 
-	public virtual List<TEntity> GetAll()
+	public virtual Task<T> Patch(T obj)
 	{
-		return _TEntityRepository.GetAll();
+		return _tEntityRepository.Patch(obj);
 	}
 
-	public virtual void Update(TEntity obj)
+	public virtual async Task<T> Remove(Guid id)
 	{
-		_TEntityRepository.Update(obj);
+		return await _tEntityRepository.Remove(id);
 	}
 
-	public virtual Task Patch(JsonPatchDocument obj, Guid id)
+	public bool ValidateEntity(T domain)
 	{
-		return _TEntityRepository.Patch(obj, id);
+		domain.IsValid();
+		if(domain?.ValidationResult?.Errors.Any() == true)
+		{
+			foreach(var domainErro in domain.ValidationResult.Errors)
+				AddNotification(domainErro);
+		}
+
+		return IsValidOperation;
 	}
 
-	public virtual void Remove(TEntity obj)
+	private void AddNotification(ValidationFailure error)
 	{
-		_TEntityRepository.Remove(obj);
+		AddNotification(error.ErrorMessage);
 	}
+
+	public void AddNotification(string message) => _serviceContext.AddNotification(message);
+
+	public bool IsValidOperation => !_serviceContext.HasNotification();
 }
