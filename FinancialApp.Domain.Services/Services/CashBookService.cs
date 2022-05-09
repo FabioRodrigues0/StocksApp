@@ -27,7 +27,7 @@ public class CashBookService : ServiceBase<CashBook>, ICashBookService
 	{
 		ValidateEntity(model);
 		//AddNotification("Erro de negocio");
-		if(!IsValidOperation)
+		if (!IsValidOperation)
 			return null;
 
 		return await _cashBookRepository.Add(model);
@@ -37,9 +37,9 @@ public class CashBookService : ServiceBase<CashBook>, ICashBookService
 	{
 		ValidateEntity(model);
 		var result = await _cashBookRepository.GetById(model.Id);
-		if(result.IsEdited)
+		if (result.IsEdited)
 			AddNotification("Cash book inserted integration can't be modified");
-		if(!IsValidOperation)
+		if (!IsValidOperation)
 			return null;
 		return await _cashBookRepository.Update(model);
 	}

@@ -1,9 +1,9 @@
-﻿using System.Threading.Tasks;
-using FinancialApp.Domain.Core.Repositories;
+﻿using FinancialApp.Domain.Core.Repositories;
 using FinancialApp.Domain.Models;
 using FinancialApp.Domain.Services.Services;
 using Moq;
 using Moq.AutoMock;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace FinancialApp.Tests.DocumentTest;
@@ -25,15 +25,15 @@ public class DocumentServiceTest
 		var document = documentFaker.document;
 
 		var repository = _mocker.GetMock<IDocumentRepository>();
-		repository.Setup(x => x.GetAll(1));
+		repository.Setup(x => x.GetAll());
 
 		var service = _mocker.CreateInstance<DocumentService>();
 
 		//Act
-		await service.GetAll(1);
+		await service.GetAll();
 
 		//Assert
-		repository.Verify(x => x.GetAll(1), Times.Once);
+		repository.Verify(x => x.GetAll(), Times.Once);
 	}
 
 	[Fact]

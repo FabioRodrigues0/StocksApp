@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using FinancialApp.Application.Interface;
+﻿using FinancialApp.Application.Interface;
 using FinancialApp.DTO.DTO;
 using FinancialApp.Shared.Controller;
 using FinancialApp.Shared.Interfaces;
@@ -25,7 +24,7 @@ public class CashBookController : ApiControllerBase
 	/// <summary>
 	/// Calls 10 CashBook in Data base
 	/// </summary>
-	/// <returns>10 CashBook in Data base</returns>
+	/// <returns>10 CashBook in Database</returns>
 	/// <response code="200">Success response</response>
 	/// <response code="400">
 	/// When a request error occurs but a message reporting the error is returned
@@ -36,15 +35,15 @@ public class CashBookController : ApiControllerBase
 	public async Task<ActionResult<string>> Get(int page)
 	{
 		var result = await _applicationCashBookService.GetAll(page);
-		if(result != null)
+		if (result != null)
 			return Ok(result);
 		return NoContent();
 	}
 
 	/// <summary>
-	/// Gets CashBook in Data base with ID indicated
+	/// Gets CashBook in Database with ID indicated
 	/// </summary>
-	/// <returns>BuyRequest in Data base with ID indicated</returns>
+	/// <returns>BuyRequest in Database with ID indicated</returns>
 	/// <response code="200">Success response</response>
 	/// <response code="400">
 	/// When a request error occurs but a message reporting the error is returned
@@ -55,13 +54,13 @@ public class CashBookController : ApiControllerBase
 	public async Task<ActionResult<string>> Get(Guid id)
 	{
 		var result = await _applicationCashBookService.GetById(id);
-		if(result != null)
+		if (result != null)
 			return Ok(result);
 		return NoContent();
 	}
 
 	/// <summary>
-	/// Gets CashBook in Data base with OriginID indicated
+	/// Gets CashBook in Database with OriginID indicated
 	/// </summary>
 	/// <returns>BuyRequest in Data base with OriginID indicated</returns>
 	/// <response code="200">Success response</response>
@@ -74,7 +73,7 @@ public class CashBookController : ApiControllerBase
 	public async Task<ActionResult<string>> GetOriginId(Guid id)
 	{
 		var result = await _applicationCashBookService.GetByOriginId(id);
-		if(result != null)
+		if (result != null)
 			return Ok(result);
 		return NoContent();
 	}

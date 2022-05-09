@@ -20,7 +20,7 @@ public class ServiceContext : IServiceContext
 
 	public void AddNotification(string message)
 	{
-		if(!Notifications.Contains(message))
+		if (!Notifications.Contains(message))
 			_notifications.Add(message);
 	}
 }

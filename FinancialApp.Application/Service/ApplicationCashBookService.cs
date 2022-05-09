@@ -3,7 +3,6 @@ using FinancialApp.Application.Interface;
 using FinancialApp.Domain.Core.Services;
 using FinancialApp.Domain.Models;
 using FinancialApp.DTO.DTO;
-using Microsoft.AspNetCore.JsonPatch;
 
 namespace FinancialApp.Application.Service;
 
@@ -22,24 +21,19 @@ public class ApplicationCashBookService : IApplicationCashBookService
 	public async Task<CashBook> Add(CashBookDto obj)
 	{
 		var result = _mapper.Map<CashBook>(obj);
-		var response = await _cashBookService.Add(result);
-		return response;
+		return await _cashBookService.Add(result);
 	}
 
 	public async Task<CashBookDto> GetById(Guid id)
 	{
 		var cashBooks = await _cashBookService.GetById(id);
-		var cashBookDto = _mapper.Map<CashBookDto>(cashBooks);
-
-		return cashBookDto;
+		return _mapper.Map<CashBookDto>(cashBooks);
 	}
 
 	public async Task<List<CashBookDto>> GetByOriginId(Guid id)
 	{
 		var cashBooks = await _cashBookService.GetByOriginId(id);
-		var cashBookDto = _mapper.Map<List<CashBookDto>>(cashBooks);
-
-		return cashBookDto;
+		return _mapper.Map<List<CashBookDto>>(cashBooks);
 	}
 
 	public async Task<PagesCashBookDto> GetAll(int page)
@@ -62,7 +56,6 @@ public class ApplicationCashBookService : IApplicationCashBookService
 	public async Task<CashBook> Update(CashBookUpdateDto obj)
 	{
 		var result = _mapper.Map<CashBook>(obj);
-		var response = await _cashBookService.Update(result);
-		return response;
+		return await _cashBookService.Update(result);
 	}
 }

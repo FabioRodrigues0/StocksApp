@@ -8,7 +8,7 @@ public class CashBook : EntityBase<CashBook>
 {
 	public override bool IsValid()
 	{
-		if(ValidationResult == null)
+		if (ValidationResult == null)
 		{
 			var validator = new CashBookValidations();
 			ValidationResult = validator.Validate(this);

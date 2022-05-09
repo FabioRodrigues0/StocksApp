@@ -1,6 +1,5 @@
 ﻿using FinancialApp.Domain.Core.Repositories;
 using FinancialApp.Domain.Models;
-using FinancialApp.Shared;
 using Microsoft.EntityFrameworkCore;
 
 namespace FinancialApp.Data.Repositories;

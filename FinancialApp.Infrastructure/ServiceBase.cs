@@ -1,6 +1,5 @@
 ﻿using FinancialApp.Shared.Interfaces;
 using FluentValidation.Results;
-using Microsoft.AspNetCore.JsonPatch;
 
 namespace FinancialApp.Shared;
 
@@ -50,9 +49,9 @@ public abstract class ServiceBase<T> : IServiceBase<T> where T : EntityBase<T>
 	public bool ValidateEntity(T domain)
 	{
 		domain.IsValid();
-		if(domain?.ValidationResult?.Errors.Any() == true)
+		if (domain?.ValidationResult?.Errors.Any() == true)
 		{
-			foreach(var domainErro in domain.ValidationResult.Errors)
+			foreach (var domainErro in domain.ValidationResult.Errors)
 				AddNotification(domainErro);
 		}
 

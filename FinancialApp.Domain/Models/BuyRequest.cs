@@ -1,5 +1,4 @@
-﻿using System.Security.Cryptography.X509Certificates;
-using FinancialApp.Domain.Models.Validations;
+﻿using FinancialApp.Domain.Models.Validations;
 using FinancialApp.Shared;
 using FinancialApp.Shared.Enums;
 
@@ -9,7 +8,7 @@ public class BuyRequest : EntityBase<BuyRequest>
 {
 	public override bool IsValid()
 	{
-		if(ValidationResult == null)
+		if (ValidationResult == null)
 		{
 			var validator = new BuyRequestValidations();
 			ValidationResult = validator.Validate(this);
@@ -24,7 +23,7 @@ public class BuyRequest : EntityBase<BuyRequest>
 	public string ClientDescription { get; set; }
 	public string ClientEmail { get; set; }
 	public string ClientPhone { get; set; }
-	public Status Status { get; set; }
+	public Status Status { get; set; } = Status.Received;
 	public string Street { get; set; }
 	public string Number { get; set; }
 	public string Sector { get; set; }

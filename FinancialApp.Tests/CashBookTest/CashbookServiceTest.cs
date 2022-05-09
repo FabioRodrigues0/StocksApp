@@ -1,39 +1,36 @@
-﻿using System.Threading.Tasks;
-using FinancialApp.Domain.Core.Repositories;
+﻿using FinancialApp.Domain.Core.Repositories;
 using FinancialApp.Domain.Models;
 using FinancialApp.Domain.Services.Services;
 using Moq;
 using Moq.AutoMock;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace FinancialApp.Tests.CashBookTest;
 
 public class CashBookServiceTest
 {
-	public readonly AutoMocker _mocker;
+	public readonly AutoMocker Mocker;
 
 	public CashBookServiceTest()
 	{
-		_mocker = new AutoMocker();
+		Mocker = new AutoMocker();
 	}
 
 	[Fact]
 	public async Task CashBookService_GetAll()
 	{
 		//Arrange
-		var cashBookFaker = new CashBookFaker();
-		var cashbook = cashBookFaker.cashbook;
+		var repository = Mocker.GetMock<ICashBookRepository>();
+		repository.Setup(x => x.GetAll());
 
-		var repository = _mocker.GetMock<ICashBookRepository>();
-		repository.Setup(x => x.GetAll(1));
-
-		var service = _mocker.CreateInstance<CashBookService>();
+		var service = Mocker.CreateInstance<CashBookService>();
 
 		//Act
-		await service.GetAll(1);
+		await service.GetAll();
 
 		//Assert
-		repository.Verify(x => x.GetAll(1), Times.Once);
+		repository.Verify(x => x.GetAll(), Times.Once);
 	}
 
 	[Fact]
@@ -43,10 +40,10 @@ public class CashBookServiceTest
 		var cashBookFaker = new CashBookFaker();
 		var cashbook = cashBookFaker.cashbook;
 
-		var repository = _mocker.GetMock<ICashBookRepository>();
+		var repository = Mocker.GetMock<ICashBookRepository>();
 		repository.Setup(x => x.GetById(cashbook.Id));
 
-		var service = _mocker.CreateInstance<CashBookService>();
+		var service = Mocker.CreateInstance<CashBookService>();
 
 		//Act
 		await service.GetById(cashbook.Id);
@@ -62,10 +59,10 @@ public class CashBookServiceTest
 		var cashBookFaker = new CashBookFaker();
 		var cashbook = cashBookFaker.cashbook;
 
-		var repository = _mocker.GetMock<ICashBookRepository>();
+		var repository = Mocker.GetMock<ICashBookRepository>();
 		repository.Setup(x => x.GetByOriginId(cashbook.OriginId));
 
-		var service = _mocker.CreateInstance<CashBookService>();
+		var service = Mocker.CreateInstance<CashBookService>();
 
 		//Act
 		await service.GetByOriginId(cashbook.OriginId);
@@ -84,10 +81,10 @@ public class CashBookServiceTest
 		var cashBookFaker = new CashBookFaker();
 		var cashbook = cashBookFaker.cashbook;
 
-		var repository = _mocker.GetMock<ICashBookRepository>();
+		var repository = Mocker.GetMock<ICashBookRepository>();
 		repository.Setup(x => x.Add(cashbook));
 
-		var service = _mocker.CreateInstance<CashBookService>();
+		var service = Mocker.CreateInstance<CashBookService>();
 
 		#endregion Vars
 
@@ -108,10 +105,13 @@ public class CashBookServiceTest
 		var cashBookFaker = new CashBookFaker();
 		var cashbook = cashBookFaker.cashbook;
 
-		var repository = _mocker.GetMock<ICashBookRepository>();
+		var repository = Mocker.GetMock<ICashBookRepository>();
+		repository.Setup(x => x.GetById(cashbook.Id)).ReturnsAsync(cashbook);
 		repository.Setup(x => x.Update(cashbook));
 
-		var service = _mocker.CreateInstance<CashBookService>();
+		var test = repository.Setups;
+
+		var service = Mocker.CreateInstance<CashBookService>();
 
 		#endregion Vars
 

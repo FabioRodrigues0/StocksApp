@@ -1,6 +1,5 @@
 global using AutoMapper;
 global using FinancialApp.Domain.Models;
-using System.Text.Json.Serialization;
 using FinancialApp.Application.Interface;
 using FinancialApp.Application.Service;
 using FinancialApp.CrossCutting.Adapter.Map;
@@ -15,6 +14,7 @@ using FinancialApp.Shared.Interfaces;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -54,7 +54,7 @@ builder.Services.AddHttpClient();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if(app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment())
 {
 	app.UseSwagger();
 	app.UseSwaggerUI();

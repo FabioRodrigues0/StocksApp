@@ -1,11 +1,9 @@
-﻿using System.Net.Http.Json;
-using System.Reflection.Metadata.Ecma335;
-using FinancialApp.Domain.Core.Repositories;
+﻿using FinancialApp.Domain.Core.Repositories;
 using FinancialApp.Domain.Models;
 using FinancialApp.DTO.DTO;
-using FinancialApp.Shared;
 using FinancialApp.Shared.Enums;
 using Microsoft.EntityFrameworkCore;
+using System.Net.Http.Json;
 
 namespace FinancialApp.Data.Repositories;
 
@@ -21,7 +19,7 @@ public class DocumentRepository : RepositoryBase<Document>, IDocumentRepository
 	public override async Task<Document> Add(Document obj)
 	{
 		await base.Add(obj);
-		if(obj.Paid)
+		if (obj.Paid)
 		{
 			var result = new CashBookDto
 			{
@@ -43,7 +41,7 @@ public class DocumentRepository : RepositoryBase<Document>, IDocumentRepository
 				.AsNoTracking()
 				.FirstOrDefaultAsync();
 		await base.Remove(id);
-		if(result.Paid)
+		if (result.Paid)
 		{
 			var cashBook = new CashBookDto
 			{
@@ -65,7 +63,7 @@ public class DocumentRepository : RepositoryBase<Document>, IDocumentRepository
 			.AsNoTracking()
 			.FirstOrDefaultAsync();
 		await base.Update(obj);
-		if(obj.Paid)
+		if (obj.Paid)
 		{
 			var cashBook = new CashBookDto
 			{
@@ -88,7 +86,7 @@ public class DocumentRepository : RepositoryBase<Document>, IDocumentRepository
 			.FirstOrDefaultAsync();
 		result.Paid = obj.Paid;
 		await base.Patch(result);
-		if(obj.Paid)
+		if (obj.Paid)
 		{
 			var cashBook = new CashBookDto
 			{

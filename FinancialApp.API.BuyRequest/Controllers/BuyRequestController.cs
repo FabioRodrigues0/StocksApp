@@ -22,7 +22,7 @@ public class BuyRequestController : ApiControllerBase
 	}
 
 	/// <summary>
-	/// Calls Page(int) of 10 BuyRequests in Data base
+	/// Calls Page(int) of 10 BuyRequests in Database
 	/// </summary>
 	/// <returns>Page(int) of 10 BuyRequest in Data base</returns>
 	/// <response code="200">Success response</response>
@@ -35,15 +35,15 @@ public class BuyRequestController : ApiControllerBase
 	public async Task<ActionResult<string>> Get([FromRoute] int page)
 	{
 		var result = await _applicationBuyRequestService.GetAll(page);
-		if(result != null)
+		if (result != null)
 			return Ok(result);
 		return NoContent();
 	}
 
 	/// <summary>
-	/// Gets BuyRequest in Data base with ID indicated or Client
+	/// Gets BuyRequest in Database with ID indicated or Client
 	/// </summary>
-	/// <returns>BuyRequest in Data base with ID indicated or Client</returns>
+	/// <returns>BuyRequest in Database with ID indicated or Client</returns>
 	/// <response code="200">Success response</response>
 	/// <response code="400">
 	/// When a request error occurs but a message reporting the error is returned
@@ -54,7 +54,7 @@ public class BuyRequestController : ApiControllerBase
 	public async Task<ActionResult<string>> Get([FromRoute] Guid id)
 	{
 		var result = await _applicationBuyRequestService.GetById(id);
-		if(result != null)
+		if (result != null)
 			return Ok(result);
 		return NoContent();
 	}

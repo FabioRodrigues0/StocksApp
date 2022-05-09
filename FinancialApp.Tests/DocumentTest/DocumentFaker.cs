@@ -1,8 +1,7 @@
-﻿using System;
-using Bogus;
+﻿using Bogus;
 using FinancialApp.Domain.Models;
-using FinancialApp.Shared;
 using FinancialApp.Shared.Enums;
+using System;
 
 namespace FinancialApp.Tests.DocumentTest;
 

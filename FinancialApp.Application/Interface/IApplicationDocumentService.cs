@@ -5,15 +5,15 @@ namespace FinancialApp.Application.Interface;
 
 public interface IApplicationDocumentService
 {
-    Task<Document> Add(DocumentDto obj);
+	Task<Document> Add(DocumentDto obj);
 
-    Task<DocumentDto> GetById(Guid id);
+	Task<DocumentDto> GetById(Guid id);
 
-    Task<PagesDocumentDto> GetAll(int page);
+	Task<PagesDocumentDto> GetAll(int page);
 
-    Task<Document> Update(DocumentUpdateDto obj);
+	Task<Document> Update(DocumentUpdateDto obj);
 
-    Task<Document> Patch(DocumentPatchDto obj);
+	Task<Document> Patch(DocumentPatchDto obj);
 
-    Task<Document> Remove(Guid id);
+	Task<Document> Remove(Guid id);
 }

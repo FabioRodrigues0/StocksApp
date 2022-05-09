@@ -1,5 +1,5 @@
-﻿using FinancialApp.Domain.Models;
-using FinancialApp.Data.Configurations;
+﻿using FinancialApp.Data.Configurations;
+using FinancialApp.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Logging;
@@ -22,7 +22,7 @@ public class DataContext : DbContext
 
 	protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 	{
-		if(!optionsBuilder.IsConfigured)
+		if (!optionsBuilder.IsConfigured)
 			optionsBuilder.UseSqlServer("server=localhost\\sqlexpress;database=FinancialApp;trusted_connection=true")
 					.UseLoggerFactory(ConsoleLoggerFactory)
 					.EnableSensitiveDataLogging();

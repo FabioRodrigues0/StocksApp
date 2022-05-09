@@ -1,9 +1,9 @@
-﻿using System.Threading.Tasks;
-using FinancialApp.Domain.Core.Repositories;
+﻿using FinancialApp.Domain.Core.Repositories;
 using FinancialApp.Domain.Models;
 using FinancialApp.Domain.Services.Services;
 using Moq;
 using Moq.AutoMock;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace FinancialApp.Tests.BuyRequestTest;
@@ -25,15 +25,15 @@ public class BuyRequestServiceTest
 		var buyRequest = buyRequestFaker.buyRequest;
 
 		var repository = _mocker.GetMock<IBuyRequestRepository>();
-		repository.Setup(x => x.GetAll(1));
+		repository.Setup(x => x.GetAll());
 
 		var service = _mocker.CreateInstance<BuyRequestService>();
 
 		//Act
-		await service.GetAll(1);
+		await service.GetAll();
 
 		//Assert
-		repository.Verify(x => x.GetAll(1), Times.Once);
+		repository.Verify(x => x.GetAll(), Times.Once);
 	}
 
 	[Fact]
@@ -109,6 +109,7 @@ public class BuyRequestServiceTest
 		var buyRequest = buyRequestFaker.buyRequest;
 
 		var repository = _mocker.GetMock<IBuyRequestRepository>();
+		repository.Setup(x => x.GetById(buyRequest.Id)).ReturnsAsync(buyRequest);
 		repository.Setup(x => x.Update(buyRequest));
 
 		var service = _mocker.CreateInstance<BuyRequestService>();
@@ -133,6 +134,7 @@ public class BuyRequestServiceTest
 		var buyRequest = buyRequestFaker.buyRequest;
 
 		var repository = _mocker.GetMock<IBuyRequestRepository>();
+		repository.Setup(x => x.GetById(buyRequest.Id)).ReturnsAsync(buyRequest);
 		repository.Setup(x => x.Patch(buyRequest));
 
 		var service = _mocker.CreateInstance<BuyRequestService>();

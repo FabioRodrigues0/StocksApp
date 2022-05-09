@@ -8,13 +8,13 @@ namespace FinancialApp.Domain.Services.Services;
 
 public class BuyRequestProductService : ServiceBase<BuyRequestProducts>, IBuyRequestProductService
 {
-    private readonly IBuyRequestProductsRepository _buyRequestProductsRepository;
+	private readonly IBuyRequestProductsRepository _buyRequestProductsRepository;
 
-    public BuyRequestProductService(
-        IServiceContext serviceContext,
-        IBuyRequestProductsRepository buyRequestProductsRepository)
-        : base(buyRequestProductsRepository, serviceContext)
-    {
-        _buyRequestProductsRepository = buyRequestProductsRepository;
-    }
+	public BuyRequestProductService(
+		IServiceContext serviceContext,
+		IBuyRequestProductsRepository buyRequestProductsRepository)
+		: base(buyRequestProductsRepository, serviceContext)
+	{
+		_buyRequestProductsRepository = buyRequestProductsRepository;
+	}
 }

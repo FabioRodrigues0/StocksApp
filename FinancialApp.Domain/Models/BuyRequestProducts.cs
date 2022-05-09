@@ -1,7 +1,6 @@
 ﻿using FinancialApp.Domain.Models.Validations;
 using FinancialApp.Shared;
 using FinancialApp.Shared.Enums;
-using Newtonsoft.Json;
 
 namespace FinancialApp.Domain.Models;
 
@@ -11,7 +10,7 @@ public class BuyRequestProducts : EntityBase<BuyRequestProducts>
 
 	public override bool IsValid()
 	{
-		if(ValidationResult == null)
+		if (ValidationResult == null)
 		{
 			var validator = new BuyRequestProductsValidations();
 			ValidationResult = validator.Validate(this);
@@ -22,8 +21,7 @@ public class BuyRequestProducts : EntityBase<BuyRequestProducts>
 
 	public virtual BuyRequest BuyRequest { get; set; }
 	public Guid BuyRequestId { get; set; }
-
-	public Guid ProductId = Guid.NewGuid();
+	public Guid ProductId { get; set; } = Guid.NewGuid();
 	public string ProductDescription { get; set; }
 	public ProductCategory ProductCategory { get; set; }
 	public decimal Quantity { get; set; }

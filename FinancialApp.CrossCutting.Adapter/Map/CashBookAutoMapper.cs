@@ -6,9 +6,9 @@ namespace FinancialApp.CrossCutting.Adapter.Map;
 
 public class CashBookAutoMapper : Profile
 {
-    public CashBookAutoMapper()
-    {
-        CreateMap<CashBook, CashBookDto>().ReverseMap();
-        CreateMap<CashBook, CashBookUpdateDto>().ReverseMap();
-    }
+	public CashBookAutoMapper()
+	{
+		CreateMap<CashBook, CashBookDto>().ReverseMap();
+		CreateMap<CashBook, CashBookUpdateDto>().ReverseMap();
+	}
 }

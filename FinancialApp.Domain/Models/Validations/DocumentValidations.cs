@@ -1,5 +1,4 @@
-﻿using FinancialApp.Domain.Models;
-using FluentValidation;
+﻿using FluentValidation;
 
 namespace FinancialApp.Domain.Models.Validations;
 

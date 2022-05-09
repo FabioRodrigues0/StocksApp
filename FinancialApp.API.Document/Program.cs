@@ -1,5 +1,4 @@
 global using FinancialApp.Domain.Models;
-using Autofac.Extensions.DependencyInjection;
 using AutoMapper;
 using FinancialApp.Application.Interface;
 using FinancialApp.Application.Service;
@@ -51,7 +50,7 @@ builder.Services.AddHttpClient();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if(app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment())
 {
 	app.UseSwagger();
 	app.UseSwaggerUI();

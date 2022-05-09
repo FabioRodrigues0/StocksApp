@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using AutoMapper;
-using Bogus;
+﻿using AutoMapper;
 using FinancialApp.CrossCutting.Adapter.Map;
-using FinancialApp.Domain.Models;
 using FinancialApp.DTO.DTO;
-using FinancialApp.Shared;
 using FinancialApp.Tests.BuyRequestTest;
 using FinancialApp.Tests.CashBookTest;
 using FinancialApp.Tests.DocumentTest;
-using Moq;
 using Moq.AutoMock;
 using Shouldly;
 using Xunit;
@@ -24,7 +18,7 @@ public class AutoMapperTest
 	public AutoMapperTest()
 	{
 		_mocker = new AutoMocker();
-		if(_mapper == null)
+		if (_mapper == null)
 		{
 			var mapConfig = new MapperConfiguration(x =>
 			{

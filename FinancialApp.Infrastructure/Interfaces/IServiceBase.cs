@@ -1,6 +1,4 @@
-﻿using FluentValidation.Results;
-
-namespace FinancialApp.Shared.Interfaces;
+﻿namespace FinancialApp.Shared.Interfaces;
 
 public interface IServiceBase<T> where T : EntityBase<T>
 {
