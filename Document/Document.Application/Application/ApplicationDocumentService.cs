@@ -1,0 +1,59 @@
+﻿using AutoMapper;
+using CashBook.Application.DTO;
+using Document.Application.Application.Interface;
+using Document.Application.DTO;
+using Document.Application.Services.Interface;
+using Document.Domain.Models;
+
+namespace Document.Application.Application;
+
+public class ApplicationDocumentService : IApplicationDocumentService
+{
+	private readonly IDocumentService _documentService;
+	private readonly IMapper _mapper;
+
+	public ApplicationDocumentService(IDocumentService documentService, IMapper mapper)
+	{
+		_documentService = documentService;
+		_mapper = mapper;
+	}
+
+	public async Task<Documents> Add(DocumentDto obj)
+	{
+		var documents = _mapper.Map<Documents>(obj);
+		return await _documentService.Add(documents);
+	}
+
+	public async Task<DocumentDto> GetById(Guid id)
+	{
+		var documents = await _documentService.GetById(id);
+		return _mapper.Map<DocumentDto>(documents);
+	}
+
+	public async Task<PagesDocumentDto> GetAll(int page)
+	{
+		var result = _documentService.GetAll(page).Result;
+		if (result.list.Count == 0)
+			return null;
+		var toDto = _mapper.Map<List<DocumentDto>>(result.list);
+		var newResult = (toDto, result.totalPages, page);
+		return _mapper.Map<PagesDocumentDto>(newResult);
+	}
+
+	public async Task<Documents> Update(DocumentUpdateDto obj)
+	{
+		var result = _mapper.Map<Documents>(obj);
+		return await _documentService.Update(result);
+	}
+
+	public async Task<Documents> Patch(DocumentPatchDto obj)
+	{
+		var result = _mapper.Map<Documents>(obj);
+		return await _documentService.Patch(result);
+	}
+
+	public async Task<bool> Remove(Guid id)
+	{
+		return await _documentService.Remove(id);
+	}
+}
