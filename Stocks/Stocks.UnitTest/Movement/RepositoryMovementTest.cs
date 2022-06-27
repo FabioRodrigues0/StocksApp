@@ -31,7 +31,7 @@ namespace Stocks.UnitTest.Movement
 
 			#region Act
 
-			var taskResult = Task.Run(async () => { await repository.GetAllAsync(1); });
+			var taskResult = Task.Run(() => { repository.GetAllAsync(1); });
 
 			#endregion Act
 
@@ -55,7 +55,7 @@ namespace Stocks.UnitTest.Movement
 
 			#region Act
 
-			var taskResult = Task.Run(async () => { await repository.GetByIdAsync(movements.Id); });
+			var taskResult = Task.Run(() => { repository.GetByIdAsync(movements.Id); });
 
 			#endregion Act
 
@@ -79,7 +79,7 @@ namespace Stocks.UnitTest.Movement
 
 			#region Act
 
-			var taskResult = Task.Run(async () => { await repository.RemoveAsync(movements.Id); });
+			var taskResult = Task.Run(() => { repository.RemoveAsync(movements.Id); });
 
 			#endregion Act
 
@@ -103,7 +103,7 @@ namespace Stocks.UnitTest.Movement
 
 			#region Act
 
-			var taskResult = Task.Run(async () => {await repository.AddAsync(movements); });
+			var taskResult = Task.Run(() => { repository.AddAsync(movements); });
 
 			#endregion Act
 

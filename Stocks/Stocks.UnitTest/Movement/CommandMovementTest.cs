@@ -18,6 +18,7 @@ namespace Stocks.UnitTest.Movement
 	{
 		public readonly AutoMocker _mocker;
 		private static IMapper _mapper;
+		bool resultBool;
 
 		public CommandMovementTest()
 		{

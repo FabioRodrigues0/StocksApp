@@ -34,7 +34,7 @@ namespace Stocks.UnitTest.Dashboard
 			var controller = _mocker.CreateInstance<DashboardController>();
 
 			//Act
-			await controller.Get();
+			controller.Get();
 
 			//Assert
 			handler.Verify(x => x.Handle(requestTest, cancellationToken), Times.Once);
@@ -58,7 +58,7 @@ namespace Stocks.UnitTest.Dashboard
 			var controller = _mocker.CreateInstance<DashboardController>();
 
 			//Act
-			await controller.Get(1);
+			controller.Get(1);
 
 			//Assert
 			handler.Verify(x => x.Handle(requestTest, cancellationToken), Times.Once);

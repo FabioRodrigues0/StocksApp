@@ -47,7 +47,7 @@ namespace Stocks.UnitTest.Dashboard
 			var cancellationToken = new CancellationToken();
 
 			//Act
-			await handler.Handle(requestTest, cancellationToken);
+			handler.Handle(requestTest, cancellationToken);
 
 			//Assert
 			repository.Verify(x => x.GetAllAsync(1), Times.Once);
@@ -70,7 +70,7 @@ namespace Stocks.UnitTest.Dashboard
 			var cancellationToken = new CancellationToken();
 
 			//Act
-			await handler.Handle(requestTest, cancellationToken);
+			handler.Handle(requestTest, cancellationToken);
 
 			//Assert
 			repository.Verify(x => x.GetBestSellers(), Times.Once);
@@ -93,7 +93,7 @@ namespace Stocks.UnitTest.Dashboard
 			var cancellationToken = new CancellationToken();
 
 			//Act
-			await handler.Handle(requestTest, cancellationToken);
+			handler.Handle(requestTest, cancellationToken);
 
 			//Assert
 			repository.Verify(x => x.GetAllAsync(1), Times.Once);
@@ -116,7 +116,7 @@ namespace Stocks.UnitTest.Dashboard
 			var cancellationToken = new CancellationToken();
 
 			//Act
-			await handler.Handle(requestTest, cancellationToken);
+			handler.Handle(requestTest, cancellationToken);
 
 			//Assert
 			repository.Verify(x => x.GetBestSellers(), Times.Once);

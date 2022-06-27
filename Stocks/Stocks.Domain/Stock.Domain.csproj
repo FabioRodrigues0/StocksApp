@@ -6,7 +6,7 @@
 
   <ItemGroup>
     <PackageReference Include="CSharpFunctionalExtensions" Version="2.29.3" />
-    <PackageReference Include="Infrastructure.Shared" Version="2.2.0" />
+    <PackageReference Include="Infrastructure.Shared" Version="2.0.0" />
     <PackageReference Include="MediatR" Version="10.0.1" />
   </ItemGroup>
 
