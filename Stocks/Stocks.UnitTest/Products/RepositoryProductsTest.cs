@@ -1,0 +1,92 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Moq.AutoMock;
+using Shouldly;
+using Stock.Data.Repositories;
+using Xunit;
+
+namespace Stocks.UnitTest.Products
+{
+	public class RepositoryProductsTest
+	{
+		public readonly AutoMocker _mocker;
+		public RepositoryProductsTest()
+		{
+			_mocker = new AutoMocker();
+		}
+
+		[Fact]
+		public async Task MovementsRepository_GetAll_Test()
+		{
+			#region Arrange
+
+			//Mock Instances
+			var repository = _mocker.CreateInstance<ProductsMovementRepository>();
+
+			#endregion Arrange
+
+			#region Act
+
+			var taskResult = Task.Run(async () => { await repository.GetAllAsync(1); });
+
+			#endregion Act
+
+			#region Assert
+
+			await taskResult.ShouldNotThrowAsync();
+
+			#endregion Assert
+		}
+
+		[Fact]
+		public async Task MovementsRepository_GetByIdAsync_Test()
+		{
+			#region Arrange
+			var products = new ModelFaker().products;
+
+			//Mock Instances
+			var repository = _mocker.CreateInstance<ProductsMovementRepository>();
+
+			#endregion Arrange
+
+			#region Act
+
+			var taskResult = Task.Run(async () => { await repository.GetByIdAsync(products.Id); });
+
+			#endregion Act
+
+			#region Assert
+
+			await taskResult.ShouldNotThrowAsync();
+
+			#endregion Assert
+		}
+
+		[Fact]
+		public async Task MovementsRepository_GetByIdWithStorageIdAsync_Test()
+		{
+			#region Arrange
+			var products = new ModelFaker().products;
+
+			//Mock Instances
+			var repository = _mocker.CreateInstance<ProductsMovementRepository>();
+
+			#endregion Arrange
+
+			#region Act
+
+			var taskResult = Task.Run(async () => { await repository.GetByIdWithStorageIdAsync(products.Id, products.StorageId); });
+
+			#endregion Act
+
+			#region Assert
+
+			await taskResult.ShouldNotThrowAsync();
+
+			#endregion Assert
+		}
+	}
+}
