@@ -49,7 +49,7 @@ namespace Stocks.UnitTest.Products
 			var controller = _mocker.CreateInstance<ProductController>();
 
 			//Act
-			controller.Get(products.Id);
+			await controller.Get(products.Id);
 
 			//Assert
 			handler.Verify(x => x.Handle(requestTest, cancellationToken), Times.Once);
@@ -73,7 +73,7 @@ namespace Stocks.UnitTest.Products
 			var controller = _mocker.CreateInstance<ProductController>();
 
 			//Act
-			controller.Get(1);
+			await controller.Get(1);
 
 			//Assert
 			handler.Verify(x => x.Handle(requestTest, cancellationToken), Times.Once);
@@ -99,7 +99,7 @@ namespace Stocks.UnitTest.Products
 			var controller = _mocker.CreateInstance<ProductController>();
 
 			//Act
-			controller.Get(products.Id, products.StorageId);
+			await controller.Get(products.Id, products.StorageId);
 
 			//Assert
 			handler.Verify(x => x.Handle(requestTest, cancellationToken), Times.Once);

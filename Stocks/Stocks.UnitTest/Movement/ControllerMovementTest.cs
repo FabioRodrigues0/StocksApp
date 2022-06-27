@@ -52,7 +52,7 @@ namespace Stocks.UnitTest.Movement
 			var controller = _mocker.CreateInstance<MovementsController>();
 
 			//Act
-			controller.Get(movements.Id);
+			await controller.Get(movements.Id);
 
 			//Assert
 			handler.Verify(x => x.Handle(requestTest, cancellationToken), Times.Once);
@@ -76,7 +76,7 @@ namespace Stocks.UnitTest.Movement
 			var controller = _mocker.CreateInstance<MovementsController>();
 
 			//Act
-			controller.Get(1);
+			await controller.Get(1);
 
 			//Assert
 			handler.Verify(x => x.Handle(requestTest, cancellationToken), Times.Once);
@@ -102,7 +102,7 @@ namespace Stocks.UnitTest.Movement
 			var controller = _mocker.CreateInstance<MovementsController>();
 
 			//Act
-			controller.Remove(movements.Id);
+			await controller.Remove(movements.Id);
 
 			//Assert
 			handler.Verify(x => x.Handle(requestTest, cancellationToken), Times.Once);
@@ -128,7 +128,7 @@ namespace Stocks.UnitTest.Movement
 			var controller = _mocker.CreateInstance<MovementsController>();
 
 			//Act
-			controller.Post(movementsDto);
+			await controller.Post(movementsDto);
 
 			//Assert
 			handler.Verify(x => x.Handle(requestTest, cancellationToken), Times.Once);

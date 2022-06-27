@@ -70,15 +70,12 @@ namespace Stocks.UnitTest.Movement
 
 			var repository = _mocker.GetMock<IMovementsRepository>();
 			var serviceContext = _mocker.GetMock<IServiceContext>();
-			var validationsBase = _mocker.GetMock<IValidationsBase<Movements>>();
-			var mapperMock = _mocker.GetMock<IMapper>();
+			var validationsBase = _mocker.GetMock<ValidationsBase<Movements>>();
 
 			var handler = _mocker.CreateInstance<PostHandler>();
 
 			//validationsBase.Setup(x => x.ValidateEntity(movements));
 			serviceContext.Setup(x => x.HasNotification());
-			//validationsBase.Setup(x => x.IsValidOperation);
-			mapperMock.Setup(x => x.Map<Movements>(result)).Returns(movements);
 			repository.Setup(x => x.AddAsync(movements));
 
 			
@@ -89,7 +86,7 @@ namespace Stocks.UnitTest.Movement
 			await handler.Handle(requestTest, cancellationToken);
 
 			//Assert
-			repository.Verify(x => x.AddAsync(It.IsAny<Movements>()), Times.Once);
+			validationsBase.Verify(x => x.IsValidOperation != true);
 		}
 
 		[Fact]

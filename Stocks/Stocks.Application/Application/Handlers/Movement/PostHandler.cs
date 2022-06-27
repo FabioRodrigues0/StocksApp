@@ -34,7 +34,7 @@ namespace Stock.Application.Application.Handlers.Movement
 		{
 			var result = request.Movements;
 			var model = _mapper.Map<Movements>(result);
-			ValidateEntity(model);
+			await ValidateEntity(model);
 			//AddNotification("Erro de negocio");
 			if (!IsValidOperation)
 				return null;

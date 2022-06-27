@@ -30,7 +30,7 @@ namespace Stocks.UnitTest.Products
 
 			#region Act
 
-			var taskResult = Task.Run(() => { repository.GetAllAsync(1); });
+			var taskResult = Task.Run(async () => { await repository.GetAllAsync(1); });
 
 			#endregion Act
 
@@ -54,7 +54,7 @@ namespace Stocks.UnitTest.Products
 
 			#region Act
 
-			var taskResult = Task.Run(() => { repository.GetByIdAsync(products.Id); });
+			var taskResult = Task.Run(async () => { await repository.GetByIdAsync(products.Id); });
 
 			#endregion Act
 
@@ -78,7 +78,7 @@ namespace Stocks.UnitTest.Products
 
 			#region Act
 
-			var taskResult = Task.Run(() => { repository.GetByIdWithStorageIdAsync(products.Id, products.StorageId); });
+			var taskResult = Task.Run(async () => { await repository.GetByIdWithStorageIdAsync(products.Id, products.StorageId); });
 
 			#endregion Act
 

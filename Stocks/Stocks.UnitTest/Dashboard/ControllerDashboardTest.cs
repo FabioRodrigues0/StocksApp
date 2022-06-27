@@ -34,10 +34,10 @@ namespace Stocks.UnitTest.Dashboard
 			var controller = _mocker.CreateInstance<DashboardController>();
 
 			//Act
-			controller.Get();
+			await controller.Get();
 
 			//Assert
-			handler.Verify(x => x.Handle(requestTest, cancellationToken), Times.Once);
+			handler.Verify(x => x.Handle(It.IsAny<GetTopFive>(), It.IsAny<CancellationToken>()), Times.Once);
 		}
 
 		[Fact]
@@ -58,10 +58,10 @@ namespace Stocks.UnitTest.Dashboard
 			var controller = _mocker.CreateInstance<DashboardController>();
 
 			//Act
-			controller.Get(1);
+			await controller.Get(1);
 
 			//Assert
-			handler.Verify(x => x.Handle(requestTest, cancellationToken), Times.Once);
+			handler.Verify(x => x.Handle(It.IsAny<GetAllDashboard>(), It.IsAny<CancellationToken>()), Times.Once);
 		}
 	}
 }

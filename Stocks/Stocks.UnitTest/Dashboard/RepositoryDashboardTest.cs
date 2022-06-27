@@ -39,7 +39,7 @@ namespace Stocks.UnitTest.Dashboard
 
 			#region Act
 
-			var taskResult = Task.Run(() => { repository.GetAll(1); });
+			var taskResult = Task.Run(async () =>  {await repository.GetAll(1); });
 
 			#endregion Act
 
@@ -63,7 +63,7 @@ namespace Stocks.UnitTest.Dashboard
 
 			#region Act
 
-			var taskResult = Task.Run(() => { repository.GetBestSellers(); });
+			var taskResult = Task.Run(async () => {await repository.GetBestSellers(); });
 
 			#endregion Act
 
