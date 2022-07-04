@@ -6,7 +6,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Stock.Application.Commands;
-using Stock.Application.DTO;
+using Stock.Application.Models;
 using Stock.Application.Queries;
 
 namespace Stock.Api.Controllers
@@ -35,14 +35,14 @@ namespace Stock.Api.Controllers
 		/// <response code="400">
 		/// When a request error occurs but a message reporting the error is returned
 		/// </response>
-		[HttpGet("page/{page}")]
+		[HttpGet("per/{itemsPerPage}/page/{page}")]
 		[ProducesResponseType(200)]
 		[ProducesResponseType(204)]
 		[ProducesResponseType(400)]
-		public async Task<IActionResult> Get([FromRoute] int page)
+		public async Task<IActionResult> Get([FromRoute] int page = 1, [FromRoute] int itemsPerPage = 10)
 		{
 			_logger.LogInformation("Begin Request for BuyRequests {page}", page);
-			return ServiceResponse(await _mediator.Send(new GetAll { page = page }));
+			return ServiceResponse(await _mediator.Send(new GetAll { page = page, itemsPerPage = itemsPerPage }));
 		}
 
 		/// <summary>
@@ -77,7 +77,7 @@ namespace Stock.Api.Controllers
 		[HttpPost]
 		[ProducesResponseType(200)]
 		[ProducesResponseType(400)]
-		public async Task<IActionResult> Post([FromBody] MovementsDto obj)
+		public async Task<IActionResult> Post([FromBody] MovementsModel obj)
 		{
 			_logger.LogInformation("Begin Request for Create a Stocks({obj})", obj);
 			return ServiceResponse(await _mediator.Send(new Post { Movements = obj }));
@@ -93,10 +93,10 @@ namespace Stock.Api.Controllers
 		/// <response code="400">
 		/// When a request error occurs but a message reporting the error is returned
 		/// </response>
-		[HttpDelete]
+		[HttpDelete("{id}")]
 		[ProducesResponseType(200)]
 		[ProducesResponseType(400)]
-		public async Task<IActionResult> Remove([FromBody] Guid id)
+		public async Task<IActionResult> Remove([FromRoute] Guid id)
 		{
 			_logger.LogInformation("Begin Request for to delete a Stocks with Id = {id})", id);
 			return ServiceResponse(await _mediator.Send(new Delete { Id = id }));

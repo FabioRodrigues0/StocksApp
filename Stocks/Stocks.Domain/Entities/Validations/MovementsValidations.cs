@@ -1,7 +1,8 @@
 ﻿using FluentValidation;
 using Infrastructure.Shared.Enums;
+using Stock.Domain.Entities;
 
-namespace Stock.Domain.Models.Validations
+namespace Stock.Domain.Entities.Validations
 {
 	public class MovementsValidations : AbstractValidator<Movements>
 	{
@@ -16,7 +17,7 @@ namespace Stock.Domain.Models.Validations
 			RuleFor(x => x.ProductsMovements).NotNull().WithMessage("Products can't be null");
 			RuleForEach(x => x.ProductsMovements)
 				.SetValidator(new ProductsMovementValidations());
-			
+
 		}
 
 		private bool IsValidOrigin(Origin origin)

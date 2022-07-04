@@ -9,7 +9,7 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using Stock.Application.Commands;
 using Stock.Data.Repositories.Interfaces;
-using Stock.Domain.Models;
+using Stock.Domain.Entities;
 
 #endregion
 

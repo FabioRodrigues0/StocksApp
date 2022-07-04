@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Infrastructure.Shared.Repository.Interface;
-using Stock.Domain.Models;
+using Stock.Domain.Entities;
 
 namespace Stock.Data.Repositories.Interfaces
 {

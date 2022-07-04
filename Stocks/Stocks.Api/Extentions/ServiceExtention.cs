@@ -6,11 +6,11 @@ using Stock.Application.Application.Handlers.Dashboard;
 using Stock.Application.Application.Handlers.Movement;
 using Stock.Application.Application.Handlers.Products;
 using Stock.Application.Commands;
-using Stock.Application.DTO;
+using Stock.Application.Models;
 using Stock.Application.Queries;
 using Stock.Data.Repositories;
 using Stock.Data.Repositories.Interfaces;
-using Stock.Domain.Models;
+using Stock.Domain.Entities;
 
 namespace Stock.Api.Extentions
 {
@@ -23,16 +23,17 @@ namespace Stock.Api.Extentions
 			services.AddScoped<IDashBoardRepository, DashBoardRepository>();
 			services.AddScoped<IServiceContext, ServiceContext>();
 			//Movement
+			services.AddTransient<IRequestHandler<Delete, bool>, DeleteHandler>();
 			services.AddTransient<IRequestHandler<Post, Movements>, PostHandler>();
-			services.AddTransient<IRequestHandler<GetAll, PagesMovementsDto>, GetAllHandler>();
-			services.AddTransient<IRequestHandler<GetById, MovementsDto>, GetByIdHandler>();
+			services.AddTransient<IRequestHandler<GetAll, PagesMovementsModel>, GetAllHandler>();
+			services.AddTransient<IRequestHandler<GetById, MovementsModel>, GetByIdHandler>();
 			//Products
-			services.AddTransient<IRequestHandler<GetAllProducts, PagesProductsDto>, GetAllProductsHandler>();
-			services.AddTransient<IRequestHandler<GetProductById, ProductsMovementDto>, GetProductByIdHandler>();
-			services.AddTransient<IRequestHandler<GetProductByIdWithStorageId, ProductsMovementDto>, GetProductByIdWithStorageIdHandler>();
+			services.AddTransient<IRequestHandler<GetAllProducts, PagesProductsModel>, GetAllProductsHandler>();
+			services.AddTransient<IRequestHandler<GetProductById, ProductsMovementModel>, GetProductByIdHandler>();
+			services.AddTransient<IRequestHandler<GetProductByIdWithStorageId, ProductsMovementModel>, GetProductByIdWithStorageIdHandler>();
 			//Dashboard
-			services.AddTransient<IRequestHandler<GetAllDashboard, PagesProductsDto>, GetAllDashboardHandler>();
-			services.AddTransient<IRequestHandler<GetTopFive, PagesProductsDto>, GetTopFiveHandler>();
+			services.AddTransient<IRequestHandler<GetAllDashboard, PagesProductsModel>, GetAllDashboardHandler>();
+			services.AddTransient<IRequestHandler<GetTopFive, PagesProductsModel>, GetTopFiveHandler>();
 		}
 	}
 }

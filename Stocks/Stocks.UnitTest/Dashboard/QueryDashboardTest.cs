@@ -1,11 +1,12 @@
 ﻿using AutoMapper;
+using Infrastructure.Shared.Entities;
 using Moq;
 using Moq.AutoMock;
 using Stock.Application.Application.Handlers.Dashboard;
 using Stock.Application.Map;
 using Stock.Application.Queries;
 using Stock.Data.Repositories.Interfaces;
-using Stock.Domain.Models;
+using Stock.Domain.Entities;
 using Xunit;
 
 namespace Stocks.UnitTest.Dashboard
@@ -35,22 +36,21 @@ namespace Stocks.UnitTest.Dashboard
 		{
 			//Arrange
 			var commandFaker = new ModelFaker();
-			int totalPages = 1, page = 1;
-			var products = (commandFaker.listProductsModel, totalPages, page);
+			var products = new PagesBase<ProductsMovement>();
 
 			var repository = _mocker.GetMock<IProductsMovementRepository>();
 
-			repository.Setup(x => x.GetAllAsync(1)).ReturnsAsync(products);
+			repository.Setup(x => x.GetAllAsync(1, 10)).ReturnsAsync(products);
 
 			var handler = _mocker.CreateInstance<GetAllDashboardHandler>();
-			var requestTest = new GetAllDashboard { page = 1 };
+			var requestTest = new GetAllDashboard { page = 1, itemsPerPage = 10 };
 			var cancellationToken = new CancellationToken();
 
 			//Act
 			await handler.Handle(requestTest, cancellationToken);
 
 			//Assert
-			repository.Verify(x => x.GetAllAsync(1), Times.Once);
+			repository.Verify(x => x.GetAllAsync(1, 10), Times.Once);
 		}
 
 		[Fact]
@@ -58,8 +58,7 @@ namespace Stocks.UnitTest.Dashboard
 		{
 			//Arrange
 			var commandFaker = new ModelFaker();
-			int totalPages = 1, page = 1;
-			var products = (commandFaker.listProductsModel, totalPages, page);
+			var products = new PagesBase<ProductsMovement>();
 
 			var repository = _mocker.GetMock<IDashBoardRepository>();
 
@@ -80,23 +79,22 @@ namespace Stocks.UnitTest.Dashboard
 		public async Task Query_GetAllDashboard_NoContent()
 		{
 			//Arrange
-			var list = new List<ProductsMovement>(); 
-			int totalPages = 1, page = 1;
-			var products = (list, totalPages, page);
+			var list = new List<ProductsMovement>();
+			var products = new PagesBase<ProductsMovement>();
 
 			var repository = _mocker.GetMock<IProductsMovementRepository>();
 
-			repository.Setup(x => x.GetAllAsync(1)).ReturnsAsync(products);
+			repository.Setup(x => x.GetAllAsync(1, 10)).ReturnsAsync(products);
 
 			var handler = _mocker.CreateInstance<GetAllDashboardHandler>();
-			var requestTest = new GetAllDashboard { page = 1 };
+			var requestTest = new GetAllDashboard { page = 1, itemsPerPage = 10 };
 			var cancellationToken = new CancellationToken();
 
 			//Act
 			await handler.Handle(requestTest, cancellationToken);
 
 			//Assert
-			repository.Verify(x => x.GetAllAsync(1), Times.Once);
+			repository.Verify(x => x.GetAllAsync(1, 10), Times.Once);
 		}
 
 		[Fact]
@@ -104,8 +102,7 @@ namespace Stocks.UnitTest.Dashboard
 		{
 			//Arrange
 			var list = new List<ProductsMovement>();
-			int totalPages = 1, page = 1;
-			var products = (list, totalPages, page);
+			var products = new PagesBase<ProductsMovement>();
 
 			var repository = _mocker.GetMock<IDashBoardRepository>();
 

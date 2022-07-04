@@ -6,40 +6,39 @@ using Infrastructure.Shared.Services;
 using Infrastructure.Shared.Services.Interface;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using Stock.Application.DTO;
+using Stock.Application.Models;
 using Stock.Application.Queries;
 using Stock.Data.Repositories.Interfaces;
-using Stock.Domain.Models;
+using Stock.Domain.Entities;
 
 namespace Stock.Application.Application.Handlers.Dashboard
 {
-	public class GetAllDashboardHandler : ValidationsBase<ProductsMovement>, IRequestHandler<GetAllDashboard, PagesProductsDto>
+	public class GetAllDashboardHandler : ValidationsBase<ProductsMovement>, IRequestHandler<GetAllDashboard, PagesProductsModel>
 	{
-		private readonly IProductsMovementRepository _productsRepository;
+		private readonly IDashBoardRepository _dashboardRepository;
 		private readonly IMapper _mapper;
 		private readonly ILogger<GetAllDashboardHandler> _logger;
 
 		public GetAllDashboardHandler(
-			IProductsMovementRepository productsRepository,
+			IDashBoardRepository dashboardRepository,
 			IServiceContext serviceContext,
 			IMapper mapper,
 			ILogger<GetAllDashboardHandler> logger) : base(logger, serviceContext)
 		{
-			_productsRepository = productsRepository;
+			_dashboardRepository = dashboardRepository;
 			_mapper = mapper;
 			_logger = logger;
 		}
 
-		public async Task<PagesProductsDto> Handle(GetAllDashboard request, CancellationToken cancellationToken)
+		public async Task<PagesProductsModel> Handle(GetAllDashboard request, CancellationToken cancellationToken)
 		{
-			var result = await _productsRepository.GetAllAsync(request.page);
-			if (result.list.Count == 0)
+			var result = await _dashboardRepository.GetAllAsync(request.page, request.itemsPerPage);
+			if (result.Models.Count == 0)
 			{
 				_logger.LogInformation("No Content");
 				NoContent(false);
 			}
-			var toPages = _mapper.Map<(List<ProductsMovementDto> list, int totalPages, int page)>(result);
-			return _mapper.Map<PagesProductsDto>(toPages);
+			return _mapper.Map<PagesProductsModel>(result);
 		}
 	}
 }

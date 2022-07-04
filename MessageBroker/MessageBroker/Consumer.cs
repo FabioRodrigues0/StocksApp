@@ -8,7 +8,7 @@ using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Stock.Application.Commands;
-using Stock.Application.DTO;
+using Stock.Application.Models;
 
 namespace MessageBroker
 {
@@ -21,7 +21,7 @@ namespace MessageBroker
 			IServiceProvider services,
 			ILogger<Consumer> logger,
 			IOptions<RabbitMqOptions> options,
-			IRabbitMQConnectionFactory factory) : base(services, logger, options, factory)
+			IRabbitMQConnectionFactory factory) : base(logger, options, factory)
 		{
 			_serviceProvider = services;
 			_logger = logger;
@@ -38,7 +38,7 @@ namespace MessageBroker
 			try
 			{
 				_logger.LogInformation(" - Received :'{0}'", message);
-				var model = JsonConvert.DeserializeObject<MovementsDto>(message);
+				var model = JsonConvert.DeserializeObject<MovementsModel>(message);
 				_logger.LogInformation(" - Send to CashBook {obj}", message);
 				using var scope = _serviceProvider.CreateScope();
 				var _mediator = scope.ServiceProvider.GetRequiredService<IMediator>();

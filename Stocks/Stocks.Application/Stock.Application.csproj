@@ -11,7 +11,7 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="11.0.1" />
-    <PackageReference Include="Infrastructure.Shared" Version="2.3.0" />
+    <PackageReference Include="Infrastructure.Shared" Version="2.4.0" />
     <PackageReference Include="MediatR" Version="10.0.1" />
   </ItemGroup>
 

@@ -15,8 +15,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Stock.Api.Extentions;
 using Stock.Data;
-using Stock.Domain.Models;
-using Stock.Domain.Models.Validations;
+using Stock.Domain.Entities;
+using Stock.Domain.Entities.Validations;
 
 #endregion
 

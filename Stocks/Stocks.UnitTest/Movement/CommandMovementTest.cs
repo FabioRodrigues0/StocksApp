@@ -6,10 +6,10 @@ using Moq;
 using Moq.AutoMock;
 using Stock.Application.Application.Handlers.Movement;
 using Stock.Application.Commands;
-using Stock.Application.DTO;
 using Stock.Application.Map;
+using Stock.Application.Models;
 using Stock.Data.Repositories.Interfaces;
-using Stock.Domain.Models;
+using Stock.Domain.Entities;
 using Xunit;
 
 namespace Stocks.UnitTest.Movement
@@ -18,7 +18,7 @@ namespace Stocks.UnitTest.Movement
 	{
 		public readonly AutoMocker _mocker;
 		private static IMapper _mapper;
-		bool resultBool;
+		private bool resultBool;
 
 		public CommandMovementTest()
 		{
@@ -41,7 +41,7 @@ namespace Stocks.UnitTest.Movement
 			//Arrange
 			var commandFaker = new ModelFaker();
 			var movements = commandFaker.movements;
-			var result = _mapper.Map<MovementsDto>(movements);
+			var result = _mapper.Map<MovementsModel>(movements);
 
 			var repository = _mocker.GetMock<IMovementsRepository>();
 			var mapperMock = _mocker.GetMock<IMapper>();
@@ -66,7 +66,7 @@ namespace Stocks.UnitTest.Movement
 			//Arrange
 			var commandFaker = new ModelFaker();
 			var movements = commandFaker.movementsFailValidation;
-			var result = _mapper.Map<MovementsDto>(movements);
+			var result = _mapper.Map<MovementsModel>(movements);
 
 			var repository = _mocker.GetMock<IMovementsRepository>();
 			var serviceContext = _mocker.GetMock<IServiceContext>();
@@ -78,7 +78,6 @@ namespace Stocks.UnitTest.Movement
 			serviceContext.Setup(x => x.HasNotification());
 			repository.Setup(x => x.AddAsync(movements));
 
-			
 			var requestTest = new Post { Movements = result };
 			var cancellationToken = new CancellationToken();
 
@@ -95,7 +94,7 @@ namespace Stocks.UnitTest.Movement
 			//Arrange
 			var commandFaker = new ModelFaker();
 			var movements = commandFaker.movements;
-			var result = _mapper.Map<MovementsDto>(movements);
+			var result = _mapper.Map<MovementsModel>(movements);
 
 			var repository = _mocker.GetMock<IMovementsRepository>();
 

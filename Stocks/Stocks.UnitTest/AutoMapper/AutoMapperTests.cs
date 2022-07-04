@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using Moq.AutoMock;
 using Shouldly;
-using Stock.Application.DTO;
 using Stock.Application.Map;
+using Stock.Application.Models;
 using Xunit;
 
 namespace Stocks.UnitTest.AutoMapper
@@ -33,7 +33,7 @@ namespace Stocks.UnitTest.AutoMapper
 			var modelFaker = new ModelFaker();
 			var movements = modelFaker.movements;
 
-			var result = _mapper.Map<MovementsDto>(movements);
+			var result = _mapper.Map<MovementsModel>(movements);
 
 			result.ShouldNotBeNull();
 			result.ShouldSatisfyAllConditions(
@@ -50,7 +50,7 @@ namespace Stocks.UnitTest.AutoMapper
 			var modelFaker = new ModelFaker();
 			var products = modelFaker.products;
 
-			var result = _mapper.Map<ProductsMovementDto>(products);
+			var result = _mapper.Map<ProductsMovementModel>(products);
 
 			result.ShouldNotBeNull();
 			result.ShouldSatisfyAllConditions(
@@ -71,7 +71,7 @@ namespace Stocks.UnitTest.AutoMapper
 			int totalPages = 1, page = 1;
 			var movements = (modelFaker.listMovementsDto, totalPages, page);
 
-			var result = _mapper.Map<PagesMovementsDto>(movements);
+			var result = _mapper.Map<PagesMovementsModel>(movements);
 
 			result.ShouldNotBeNull();
 		}
@@ -83,7 +83,7 @@ namespace Stocks.UnitTest.AutoMapper
 			int totalPages = 1, page = 1;
 			var products = (modelFaker.listProductsDto, totalPages, page);
 
-			var result = _mapper.Map<PagesProductsDto>(products);
+			var result = _mapper.Map<PagesProductsModel>(products);
 
 			result.ShouldNotBeNull();
 		}

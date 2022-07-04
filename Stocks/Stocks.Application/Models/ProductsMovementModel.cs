@@ -1,9 +1,9 @@
 ﻿using System;
 using Infrastructure.Shared.Enums;
 
-namespace Stock.Application.DTO
+namespace Stock.Application.Models
 {
-	public class ProductsMovementDto
+	public class ProductsMovementModel
 	{
 		public Guid ProductId { get; set; }
 		public string ProductDescription { get; set; }

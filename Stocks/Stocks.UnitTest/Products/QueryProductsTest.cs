@@ -1,11 +1,12 @@
 ﻿using AutoMapper;
+using Infrastructure.Shared.Entities;
 using Moq;
 using Moq.AutoMock;
 using Stock.Application.Application.Handlers.Products;
 using Stock.Application.Map;
 using Stock.Application.Queries;
 using Stock.Data.Repositories.Interfaces;
-using Stock.Domain.Models;
+using Stock.Domain.Entities;
 using Xunit;
 
 namespace Stocks.UnitTest.Products
@@ -35,22 +36,21 @@ namespace Stocks.UnitTest.Products
 		{
 			//Arrange
 			var commandFaker = new ModelFaker();
-			int totalPages = 1, page = 1;
-			var producsts = (commandFaker.listProductsModel, totalPages, page);
+			var producsts = new PagesBase<ProductsMovement>();
 
 			var repository = _mocker.GetMock<IProductsMovementRepository>();
 
-			repository.Setup(x => x.GetAllAsync(1)).ReturnsAsync(producsts);
+			repository.Setup(x => x.GetAllAsync(1, 10)).ReturnsAsync(producsts);
 
 			var handler = _mocker.CreateInstance<GetAllProductsHandler>();
-			var requestTest = new GetAllProducts { page = 1 };
+			var requestTest = new GetAllProducts { page = 1, itemsPerPage = 10 };
 			var cancellationToken = new CancellationToken();
 
 			//Act
 			await handler.Handle(requestTest, cancellationToken);
 
 			//Assert
-			repository.Verify(x => x.GetAllAsync(1), Times.Once);
+			repository.Verify(x => x.GetAllAsync(1, 10), Times.Once);
 		}
 
 		[Fact]
@@ -104,21 +104,21 @@ namespace Stocks.UnitTest.Products
 			var commandFaker = new ModelFaker();
 			var list = new List<ProductsMovement>();
 			int totalPages = 1, page = 1;
-			var producsts = (list, totalPages, page);
+			var producsts = new PagesBase<ProductsMovement>();
 
 			var repository = _mocker.GetMock<IProductsMovementRepository>();
 
-			repository.Setup(x => x.GetAllAsync(1)).ReturnsAsync(producsts);
+			repository.Setup(x => x.GetAllAsync(1, 10)).ReturnsAsync(producsts);
 
 			var handler = _mocker.CreateInstance<GetAllProductsHandler>();
-			var requestTest = new GetAllProducts { page = 1 };
+			var requestTest = new GetAllProducts { page = 1, itemsPerPage = 10 };
 			var cancellationToken = new CancellationToken();
 
 			//Act
 			await handler.Handle(requestTest, cancellationToken);
 
 			//Assert
-			repository.Verify(x => x.GetAllAsync(1), Times.Once);
+			repository.Verify(x => x.GetAllAsync(1, 10), Times.Once);
 		}
 
 		[Fact]

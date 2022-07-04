@@ -5,14 +5,14 @@ using Infrastructure.Shared.Services;
 using Infrastructure.Shared.Services.Interface;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using Stock.Application.DTO;
+using Stock.Application.Models;
 using Stock.Application.Queries;
 using Stock.Data.Repositories.Interfaces;
-using Stock.Domain.Models;
+using Stock.Domain.Entities;
 
 namespace Stock.Application.Application.Handlers.Movement
 {
-	public sealed class GetByIdHandler : ValidationsBase<Movements>, IRequestHandler<GetById, MovementsDto>
+	public sealed class GetByIdHandler : ValidationsBase<Movements>, IRequestHandler<GetById, MovementsModel>
 	{
 		private readonly IMovementsRepository _MovementsRepository;
 		private readonly IMapper _mapper;
@@ -29,7 +29,7 @@ namespace Stock.Application.Application.Handlers.Movement
 			_logger = logger;
 		}
 
-		public async Task<MovementsDto> Handle(GetById request, CancellationToken cancellationToken)
+		public async Task<MovementsModel> Handle(GetById request, CancellationToken cancellationToken)
 		{
 			var result = await _MovementsRepository.GetByIdAsync(request.Id);
 			if (result == null)
@@ -37,7 +37,7 @@ namespace Stock.Application.Application.Handlers.Movement
 				_logger.LogInformation("No Content");
 				NoContent(false);
 			}
-			return _mapper.Map<MovementsDto>(result);
+			return _mapper.Map<MovementsModel>(result);
 		}
 	}
 }

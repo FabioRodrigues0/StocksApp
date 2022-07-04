@@ -6,14 +6,14 @@ using Infrastructure.Shared.Services;
 using Infrastructure.Shared.Services.Interface;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using Stock.Application.DTO;
+using Stock.Application.Models;
 using Stock.Application.Queries;
 using Stock.Data.Repositories.Interfaces;
-using Stock.Domain.Models;
+using Stock.Domain.Entities;
 
 namespace Stock.Application.Application.Handlers.Movement
 {
-	public sealed class GetAllHandler : ValidationsBase<Movements>, IRequestHandler<GetAll, PagesMovementsDto>
+	public sealed class GetAllHandler : ValidationsBase<Movements>, IRequestHandler<GetAll, PagesMovementsModel>
 	{
 		private readonly IMovementsRepository _movementsRepository;
 		private readonly IMapper _mapper;
@@ -30,16 +30,15 @@ namespace Stock.Application.Application.Handlers.Movement
 			_logger = logger;
 		}
 
-		public async Task<PagesMovementsDto> Handle(GetAll request, CancellationToken cancellationToken)
+		public async Task<PagesMovementsModel> Handle(GetAll request, CancellationToken cancellationToken)
 		{
-			var result = await _movementsRepository.GetAllAsync(request.page);
-			if (result.list.Count == 0)
+			var result = await _movementsRepository.GetAllAsync(request.page, request.itemsPerPage);
+			if (result.Models.Count == 0)
 			{
 				_logger.LogInformation("No Content");
 				NoContent(false);
 			}
-			var toPages = _mapper.Map<(List<MovementsDto> list, int totalPages, int page)>(result);
-			return _mapper.Map<PagesMovementsDto>(toPages);
+			return _mapper.Map<PagesMovementsModel>(result);
 		}
 	}
 }

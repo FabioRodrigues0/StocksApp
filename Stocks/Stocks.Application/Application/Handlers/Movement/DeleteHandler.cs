@@ -1,13 +1,14 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
+using Infrastructure.Shared.Enums;
 using Infrastructure.Shared.Services;
 using Infrastructure.Shared.Services.Interface;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Stock.Application.Commands;
 using Stock.Data.Repositories.Interfaces;
-using Stock.Domain.Models;
+using Stock.Domain.Entities;
 
 namespace Stock.Application.Application.Handlers.Movement
 {
@@ -28,7 +29,11 @@ namespace Stock.Application.Application.Handlers.Movement
 
 		public async Task<bool> Handle(Delete request, CancellationToken cancellationToken)
 		{
-			return await _MovementsRepository.RemoveAsync(request.Id);
+			var obj = await _MovementsRepository.GetByIdAsync(request.Id);
+			if (obj == null)
+				return true;
+			var result = await _MovementsRepository.RemoveAsync(request.Id);
+			return result;
 		}
 	}
 }

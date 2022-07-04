@@ -2,7 +2,7 @@
 using Moq;
 using Moq.AutoMock;
 using Stock.Api.Controllers;
-using Stock.Application.DTO;
+using Stock.Application.Models;
 using Stock.Application.Queries;
 using Xunit;
 
@@ -22,7 +22,7 @@ namespace Stocks.UnitTest.Dashboard
 			//Arrange
 			var pageProducts = new ModelFaker().pageProducts;
 
-			var handler = _mocker.GetMock<IRequestHandler<GetTopFive, PagesProductsDto>>();
+			var handler = _mocker.GetMock<IRequestHandler<GetTopFive, PagesProductsModel>>();
 			var mediator = _mocker.GetMock<IMediator>();
 
 			var requestTest = new GetTopFive { };
@@ -46,7 +46,7 @@ namespace Stocks.UnitTest.Dashboard
 			//Arrange
 			var pageProducts = new ModelFaker().pageProducts;
 
-			var handler = _mocker.GetMock<IRequestHandler<GetAllDashboard, PagesProductsDto>>();
+			var handler = _mocker.GetMock<IRequestHandler<GetAllDashboard, PagesProductsModel>>();
 			var mediator = _mocker.GetMock<IMediator>();
 
 			var requestTest = new GetAllDashboard { page = 1 };

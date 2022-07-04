@@ -1,7 +1,7 @@
 ﻿using Infrastructure.Shared.Data;
 using Microsoft.EntityFrameworkCore;
 using Stock.Data.Configurations;
-using Stock.Domain.Models;
+using Stock.Domain.Entities;
 
 namespace Stock.Data
 {

@@ -1,12 +1,13 @@
 ﻿using AutoMapper;
+using Infrastructure.Shared.Entities;
 using Moq;
 using Moq.AutoMock;
 using Stock.Application.Application.Handlers.Movement;
-using Stock.Application.DTO;
 using Stock.Application.Map;
+using Stock.Application.Models;
 using Stock.Application.Queries;
 using Stock.Data.Repositories.Interfaces;
-using Stock.Domain.Models;
+using Stock.Domain.Entities;
 using Xunit;
 
 namespace Stocks.UnitTest.Movement
@@ -36,22 +37,21 @@ namespace Stocks.UnitTest.Movement
 		{
 			//Arrange
 			var commandFaker = new ModelFaker();
-			int totalPages = 1, page = 1;
-			var movements = (commandFaker.listMovementsModel, totalPages, page);
+			var movements = new PagesBase<Movements>();
 
 			var repository = _mocker.GetMock<IMovementsRepository>();
 
-			repository.Setup(x => x.GetAllAsync(1)).ReturnsAsync(movements);
+			repository.Setup(x => x.GetAllAsync(1, 10)).ReturnsAsync(movements);
 
 			var handler = _mocker.CreateInstance<GetAllHandler>();
-			var requestTest = new GetAll { page = 1 };
+			var requestTest = new GetAll { page = 1, itemsPerPage = 10 };
 			var cancellationToken = new CancellationToken();
 
 			//Act
 			await handler.Handle(requestTest, cancellationToken);
 
 			//Assert
-			repository.Verify(x => x.GetAllAsync(1), Times.Once);
+			repository.Verify(x => x.GetAllAsync(1, 10), Times.Once);
 		}
 
 		[Fact]
@@ -60,7 +60,7 @@ namespace Stocks.UnitTest.Movement
 			//Arrange
 			var commandFaker = new ModelFaker();
 			var movements = commandFaker.movements;
-			var result = _mapper.Map<MovementsDto>(movements);
+			var result = _mapper.Map<MovementsModel>(movements);
 
 			var repository = _mocker.GetMock<IMovementsRepository>();
 
@@ -82,22 +82,21 @@ namespace Stocks.UnitTest.Movement
 		{
 			//Arrange
 			var list = new List<Movements>();
-			int totalPages = 1, page = 1;
-			var movements = (list, totalPages, page);
+			var movements = new PagesBase<Movements>();
 
 			var repository = _mocker.GetMock<IMovementsRepository>();
 
-			repository.Setup(x => x.GetAllAsync(1)).ReturnsAsync(movements);
+			repository.Setup(x => x.GetAllAsync(1, 10)).ReturnsAsync(movements);
 
 			var handler = _mocker.CreateInstance<GetAllHandler>();
-			var requestTest = new GetAll { page = 1 };
+			var requestTest = new GetAll { page = 1, itemsPerPage = 10 };
 			var cancellationToken = new CancellationToken();
 
 			//Act
 			await handler.Handle(requestTest, cancellationToken);
 
 			//Assert
-			repository.Verify(x => x.GetAllAsync(1), Times.Once);
+			repository.Verify(x => x.GetAllAsync(1, 10), Times.Once);
 		}
 	}
 }

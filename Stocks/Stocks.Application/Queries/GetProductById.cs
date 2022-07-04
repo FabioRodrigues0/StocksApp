@@ -1,10 +1,10 @@
 ﻿using System;
 using MediatR;
-using Stock.Application.DTO;
+using Stock.Application.Models;
 
 namespace Stock.Application.Queries
 {
-	public sealed class GetProductById : IRequest<ProductsMovementDto>
+	public sealed class GetProductById : IRequest<ProductsMovementModel>
 	{
 		public Guid Id { get; set; }
 	}

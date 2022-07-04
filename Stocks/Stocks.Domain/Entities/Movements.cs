@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Infrastructure.Shared.Enums;
-using Infrastructure.Shared.Models;
-using Stock.Domain.Models.Validations;
+using Infrastructure.Shared.Entities;
+using Stock.Domain.Entities.Validations;
 
-namespace Stock.Domain.Models
+namespace Stock.Domain.Entities
 {
 	public class Movements : EntityBase<Movements>
 	{

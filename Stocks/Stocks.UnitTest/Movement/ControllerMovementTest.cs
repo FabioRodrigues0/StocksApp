@@ -4,10 +4,10 @@ using Moq;
 using Moq.AutoMock;
 using Stock.Api.Controllers;
 using Stock.Application.Commands;
-using Stock.Application.DTO;
 using Stock.Application.Map;
+using Stock.Application.Models;
 using Stock.Application.Queries;
-using Stock.Domain.Models;
+using Stock.Domain.Entities;
 using Xunit;
 
 namespace Stocks.UnitTest.Movement
@@ -16,7 +16,8 @@ namespace Stocks.UnitTest.Movement
 	{
 		public readonly AutoMocker _mocker;
 		private static IMapper _mapper;
-		bool result;
+		private bool result;
+
 		public ControllerMovementTest()
 		{
 			_mocker = new AutoMocker();
@@ -38,9 +39,9 @@ namespace Stocks.UnitTest.Movement
 			//Arrange
 			var pageProducts = new ModelFaker().pageProducts;
 			var movements = new ModelFaker().movements;
-			var result = _mapper.Map<MovementsDto>(movements);
+			var result = _mapper.Map<MovementsModel>(movements);
 
-			var handler = _mocker.GetMock<IRequestHandler<GetById, MovementsDto>>();
+			var handler = _mocker.GetMock<IRequestHandler<GetById, MovementsModel>>();
 			var mediator = _mocker.GetMock<IMediator>();
 
 			var requestTest = new GetById { Id = movements.Id };
@@ -64,7 +65,7 @@ namespace Stocks.UnitTest.Movement
 			//Arrange
 			var pageMovements = new ModelFaker().pageMovements;
 
-			var handler = _mocker.GetMock<IRequestHandler<GetAll, PagesMovementsDto>>();
+			var handler = _mocker.GetMock<IRequestHandler<GetAll, PagesMovementsModel>>();
 			var mediator = _mocker.GetMock<IMediator>();
 
 			var requestTest = new GetAll { page = 1 };
@@ -88,7 +89,6 @@ namespace Stocks.UnitTest.Movement
 			//Arrange
 			var pageProducts = new ModelFaker().pageProducts;
 			var movements = new ModelFaker().movements;
-
 
 			var handler = _mocker.GetMock<IRequestHandler<Delete, bool>>();
 			var mediator = _mocker.GetMock<IMediator>();
@@ -114,7 +114,7 @@ namespace Stocks.UnitTest.Movement
 			//Arrange
 			var pageProducts = new ModelFaker().pageProducts;
 			var movements = new ModelFaker().movements;
-			var movementsDto = _mapper.Map<MovementsDto>(movements);
+			var movementsDto = _mapper.Map<MovementsModel>(movements);
 
 			var handler = _mocker.GetMock<IRequestHandler<Post, Movements>>();
 			var mediator = _mocker.GetMock<IMediator>();

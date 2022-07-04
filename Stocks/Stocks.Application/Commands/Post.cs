@@ -1,8 +1,8 @@
 ﻿#region Imports
 
 using MediatR;
-using Stock.Application.DTO;
-using Stock.Domain.Models;
+using Stock.Application.Models;
+using Stock.Domain.Entities;
 
 #endregion
 
@@ -10,6 +10,6 @@ namespace Stock.Application.Commands
 {
 	public class Post : IRequest<Movements>
 	{
-		public MovementsDto Movements { get; set; }
+		public MovementsModel Movements { get; set; }
 	}
 }

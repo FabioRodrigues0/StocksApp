@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
+using Stock.Domain.Entities;
 
-namespace Stock.Domain.Models.Validations
+namespace Stock.Domain.Entities.Validations
 {
 	public class ProductsMovementValidations : AbstractValidator<ProductsMovement>
 	{

@@ -1,7 +1,7 @@
 ﻿using Bogus;
 using Infrastructure.Shared.Enums;
-using Stock.Application.DTO;
-using Stock.Domain.Models;
+using Stock.Application.Models;
+using Stock.Domain.Entities;
 
 namespace Stocks.UnitTest
 {
@@ -27,7 +27,7 @@ namespace Stocks.UnitTest
 			.RuleFor(x => x.StorageId, Guid.NewGuid)
 			.RuleFor(x => x.StorageDescription, x => x.Random.String(1, 256));
 
-		public static Faker<ProductsMovementDto> productsDto = new Faker<ProductsMovementDto>()
+		public static Faker<ProductsMovementModel> productsDto = new Faker<ProductsMovementModel>()
 			.RuleFor(x => x.ProductId, Guid.NewGuid)
 			.RuleFor(x => x.ProductDescription, x => x.Random.String(1, 256))
 			.RuleFor(x => x.ProductCategory, x => x.PickRandom<ProductCategory>())
@@ -36,7 +36,7 @@ namespace Stocks.UnitTest
 			.RuleFor(x => x.StorageId, Guid.NewGuid)
 			.RuleFor(x => x.StorageDescription, x => x.Random.String(1, 256));
 
-		public static Faker<MovementsDto> movementsDto = new Faker<MovementsDto>()
+		public static Faker<MovementsModel> movementsDto = new Faker<MovementsModel>()
 			.RuleFor(x => x.Origin, x => Origin.BuyRequest)
 			.RuleFor(x => x.OriginId, Guid.NewGuid)
 			.RuleFor(x => x.Date, DateTimeOffset.Now.AddDays(6))
@@ -56,19 +56,20 @@ namespace Stocks.UnitTest
 			.RuleFor(x => x.Origin, x => Origin.CashBook)
 			.RuleFor(x => x.OriginId, Guid.NewGuid)
 			.RuleFor(x => x.Type, x => x.PickRandom<Operation>());
-			//.RuleFor(x => x.ProductsMovements, x => productsFaker.GenerateBetween(1, 3));
 
-		public PagesMovementsDto pageMovements = new Faker<PagesMovementsDto>()
+		//.RuleFor(x => x.ProductsMovements, x => productsFaker.GenerateBetween(1, 3));
+
+		public PagesMovementsModel pageMovements = new Faker<PagesMovementsModel>()
 			.RuleFor(x => x.Models, x => movementsDto.GenerateBetween(1, 3))
 			.RuleFor(x => x.CurrentPage, 1)
 			.RuleFor(x => x.Pages, 1);
 
-		public PagesProductsDto pageProducts = new Faker<PagesProductsDto>()
+		public PagesProductsModel pageProducts = new Faker<PagesProductsModel>()
 			.RuleFor(x => x.Models, x => productsDto.GenerateBetween(1, 3))
 			.RuleFor(x => x.CurrentPage, 1)
 			.RuleFor(x => x.Pages, 1);
 
-		public List<ProductsMovementDto> listProductsDto = new Faker<ProductsMovementDto>()
+		public List<ProductsMovementModel> listProductsDto = new Faker<ProductsMovementModel>()
 			.RuleFor(x => x.ProductId, Guid.NewGuid)
 			.RuleFor(x => x.ProductDescription, x => x.Random.String(1, 256))
 			.RuleFor(x => x.ProductCategory, x => x.PickRandom<ProductCategory>())
@@ -89,7 +90,7 @@ namespace Stocks.UnitTest
 			.RuleFor(x => x.StorageDescription, x => x.Random.String(1, 256))
 			.GenerateBetween(1, 3);
 
-		public List<MovementsDto> listMovementsDto = new Faker<MovementsDto>()
+		public List<MovementsModel> listMovementsDto = new Faker<MovementsModel>()
 			.RuleFor(x => x.Origin, x => Origin.BuyRequest)
 			.RuleFor(x => x.OriginId, Guid.NewGuid)
 			.RuleFor(x => x.Date, DateTimeOffset.Now.AddDays(6))

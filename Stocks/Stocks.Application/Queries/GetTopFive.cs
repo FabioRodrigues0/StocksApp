@@ -1,9 +1,9 @@
 ﻿using MediatR;
-using Stock.Application.DTO;
+using Stock.Application.Models;
 
 namespace Stock.Application.Queries
 {
-	public class GetTopFive : IRequest<PagesProductsDto>
+	public class GetTopFive : IRequest<PagesProductsModel>
 	{
 	}
 }

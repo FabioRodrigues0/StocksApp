@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using AutoMapper;
-using Stock.Application.DTO;
+using Infrastructure.Shared.Entities;
+using Stock.Application.Models;
+using Stock.Domain.Entities;
 
 namespace Stock.Application.Map
 {
@@ -8,15 +10,8 @@ namespace Stock.Application.Map
 	{
 		public PagesMapper()
 		{
-			CreateMap<(List<MovementsDto> list, int totalPages, int page), PagesMovementsDto>()
-			.ForMember(to => to.Models, from => from.MapFrom(x => x.list))
-			.ForMember(to => to.CurrentPage, from => from.MapFrom(x => x.page))
-			.ForMember(to => to.Pages, from => from.MapFrom(x => x.totalPages));
-
-			CreateMap<(List<ProductsMovementDto> list, int totalPages, int page), PagesProductsDto>()
-			.ForMember(to => to.Models, from => from.MapFrom(x => x.list))
-			.ForMember(to => to.CurrentPage, from => from.MapFrom(x => x.page))
-			.ForMember(to => to.Pages, from => from.MapFrom(x => x.totalPages));
+			CreateMap<PagesBase<Movements>, PagesMovementsModel>().ReverseMap();
+			CreateMap<PagesBase<ProductsMovement>, PagesProductsModel>().ReverseMap();
 		}
 	}
 }

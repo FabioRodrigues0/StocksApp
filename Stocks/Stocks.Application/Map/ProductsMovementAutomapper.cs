@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using AutoMapper;
-using Stock.Application.DTO;
-using Stock.Domain.Models;
+using Stock.Application.Models;
+using Stock.Domain.Entities;
 
 namespace Stock.Application.Map
 {
@@ -9,8 +9,7 @@ namespace Stock.Application.Map
 	{
 		public ProductsMovementAutomapper()
 		{
-			CreateMap<ProductsMovementDto, ProductsMovement>().ReverseMap();
-			CreateMap<(List<ProductsMovementDto> list, int totalPages, int page), (List<ProductsMovement> list, int totalPages, int page)>().ReverseMap();
+			CreateMap<ProductsMovementModel, ProductsMovement>().ReverseMap();
 		}
 	}
 }

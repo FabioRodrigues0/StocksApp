@@ -8,7 +8,7 @@
 
     <ItemGroup>
         <PackageReference Include="AutoMapper" Version="11.0.1" />
-        <PackageReference Include="Infrastructure.Shared" Version="2.2.0" />
+        <PackageReference Include="Infrastructure.Shared" Version="2.4.0" />
         <PackageReference Include="MediatR" Version="10.0.1" />
         <PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
         <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.16.1" />

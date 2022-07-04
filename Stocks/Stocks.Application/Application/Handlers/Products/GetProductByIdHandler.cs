@@ -5,14 +5,14 @@ using Infrastructure.Shared.Services;
 using Infrastructure.Shared.Services.Interface;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using Stock.Application.DTO;
+using Stock.Application.Models;
 using Stock.Application.Queries;
 using Stock.Data.Repositories.Interfaces;
-using Stock.Domain.Models;
+using Stock.Domain.Entities;
 
 namespace Stock.Application.Application.Handlers.Products
 {
-	public sealed class GetProductByIdHandler : ValidationsBase<ProductsMovement>, IRequestHandler<GetProductById, ProductsMovementDto>
+	public sealed class GetProductByIdHandler : ValidationsBase<ProductsMovement>, IRequestHandler<GetProductById, ProductsMovementModel>
 	{
 		private readonly IProductsMovementRepository _productsRepository;
 		private readonly IMapper _mapper;
@@ -29,7 +29,7 @@ namespace Stock.Application.Application.Handlers.Products
 			_logger = logger;
 		}
 
-		public async Task<ProductsMovementDto> Handle(GetProductById request, CancellationToken cancellationToken)
+		public async Task<ProductsMovementModel> Handle(GetProductById request, CancellationToken cancellationToken)
 		{
 			var result = await _productsRepository.GetByIdAsync(request.Id);
 			if (result == null)
@@ -37,7 +37,7 @@ namespace Stock.Application.Application.Handlers.Products
 				_logger.LogInformation("No Content");
 				NoContent(false);
 			}
-			return _mapper.Map<ProductsMovementDto>(result);
+			return _mapper.Map<ProductsMovementModel>(result);
 		}
 	}
 }

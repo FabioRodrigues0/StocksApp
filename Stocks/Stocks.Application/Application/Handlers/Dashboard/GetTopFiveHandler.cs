@@ -6,14 +6,14 @@ using Infrastructure.Shared.Services;
 using Infrastructure.Shared.Services.Interface;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using Stock.Application.DTO;
+using Stock.Application.Models;
 using Stock.Application.Queries;
 using Stock.Data.Repositories.Interfaces;
-using Stock.Domain.Models;
+using Stock.Domain.Entities;
 
 namespace Stock.Application.Application.Handlers.Dashboard
 {
-	public class GetTopFiveHandler : ValidationsBase<ProductsMovement>, IRequestHandler<GetTopFive, PagesProductsDto>
+	public class GetTopFiveHandler : ValidationsBase<ProductsMovement>, IRequestHandler<GetTopFive, PagesProductsModel>
 	{
 		private readonly IDashBoardRepository _dashboardRepository;
 		private readonly IMapper _mapper;
@@ -30,16 +30,15 @@ namespace Stock.Application.Application.Handlers.Dashboard
 			_logger = logger;
 		}
 
-		public async Task<PagesProductsDto> Handle(GetTopFive request, CancellationToken cancellationToken)
+		public async Task<PagesProductsModel> Handle(GetTopFive request, CancellationToken cancellationToken)
 		{
 			var result = await _dashboardRepository.GetBestSellers();
-			if (result.list.Count == 0)
+			if (result.Models.Count == 0)
 			{
 				_logger.LogInformation("No Content");
 				NoContent(false);
 			}
-			var toPages = _mapper.Map<(List<ProductsMovementDto> list, int totalPages, int page)>(result);
-			return _mapper.Map<PagesProductsDto>(toPages);
+			return _mapper.Map<PagesProductsModel>(result);
 		}
 	}
 }

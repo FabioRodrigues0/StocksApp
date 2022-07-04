@@ -33,14 +33,14 @@ namespace Stock.Api.Controllers
 		/// <response code="400">
 		/// When a request error occurs but a message reporting the error is returned
 		/// </response>
-		[HttpGet("page/{page}")]
+		[HttpGet("per/{itemsPerPage}/page/{page}")]
 		[ProducesResponseType(200)]
 		[ProducesResponseType(204)]
 		[ProducesResponseType(400)]
-		public async Task<IActionResult> Get([FromRoute] int page)
+		public async Task<IActionResult> Get([FromRoute] int page = 1, [FromRoute] int itemsPerPage = 10)
 		{
 			_logger.LogInformation("Begin Request for Products {page}", page);
-			return ServiceResponse(await _mediator.Send(new GetAllProducts { page = page }));
+			return ServiceResponse(await _mediator.Send(new GetAllProducts { page = page, itemsPerPage = itemsPerPage }));
 		}
 
 		/// <summary>
@@ -75,7 +75,7 @@ namespace Stock.Api.Controllers
 		[HttpGet("{id}/storage/{storageId}")]
 		[ProducesResponseType(200)]
 		[ProducesResponseType(400)]
-		public async Task<IActionResult> Get([FromRoute] Guid id, Guid storageId)
+		public async Task<IActionResult> Get([FromRoute] Guid id, [FromRoute] Guid storageId)
 		{
 			_logger.LogInformation("Begin Request for Product with Id = {id} and StorageId = {storageId}", id, storageId);
 			return ServiceResponse(await _mediator.Send(new GetProductByIdWithStorageId { Id = id, StorageId = storageId }));

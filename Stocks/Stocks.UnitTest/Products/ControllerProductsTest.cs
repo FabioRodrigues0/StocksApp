@@ -3,8 +3,8 @@ using MediatR;
 using Moq;
 using Moq.AutoMock;
 using Stock.Api.Controllers;
-using Stock.Application.DTO;
 using Stock.Application.Map;
+using Stock.Application.Models;
 using Stock.Application.Queries;
 using Xunit;
 
@@ -35,9 +35,9 @@ namespace Stocks.UnitTest.Products
 			//Arrange
 			var pageProducts = new ModelFaker().pageProducts;
 			var products = new ModelFaker().products;
-			var result = _mapper.Map<ProductsMovementDto>(products);
+			var result = _mapper.Map<ProductsMovementModel>(products);
 
-			var handler = _mocker.GetMock<IRequestHandler<GetProductById, ProductsMovementDto>>();
+			var handler = _mocker.GetMock<IRequestHandler<GetProductById, ProductsMovementModel>>();
 			var mediator = _mocker.GetMock<IMediator>();
 
 			var requestTest = new GetProductById { Id = products.Id };
@@ -61,7 +61,7 @@ namespace Stocks.UnitTest.Products
 			//Arrange
 			var pageProducts = new ModelFaker().pageProducts;
 
-			var handler = _mocker.GetMock<IRequestHandler<GetAllProducts, PagesProductsDto>>();
+			var handler = _mocker.GetMock<IRequestHandler<GetAllProducts, PagesProductsModel>>();
 			var mediator = _mocker.GetMock<IMediator>();
 
 			var requestTest = new GetAllProducts { page = 1 };
@@ -85,9 +85,9 @@ namespace Stocks.UnitTest.Products
 			//Arrange
 			var pageProducts = new ModelFaker().pageProducts;
 			var products = new ModelFaker().products;
-			var result = _mapper.Map<ProductsMovementDto>(products);
+			var result = _mapper.Map<ProductsMovementModel>(products);
 
-			var handler = _mocker.GetMock<IRequestHandler<GetProductByIdWithStorageId, ProductsMovementDto>>();
+			var handler = _mocker.GetMock<IRequestHandler<GetProductByIdWithStorageId, ProductsMovementModel>>();
 			var mediator = _mocker.GetMock<IMediator>();
 
 			var requestTest = new GetProductByIdWithStorageId { Id = products.Id, StorageId = products.StorageId };

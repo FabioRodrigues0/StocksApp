@@ -6,14 +6,14 @@ using Infrastructure.Shared.Services;
 using Infrastructure.Shared.Services.Interface;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using Stock.Application.DTO;
+using Stock.Application.Models;
 using Stock.Application.Queries;
 using Stock.Data.Repositories.Interfaces;
-using Stock.Domain.Models;
+using Stock.Domain.Entities;
 
 namespace Stock.Application.Application.Handlers.Products
 {
-	public sealed class GetAllProductsHandler : ValidationsBase<ProductsMovement>, IRequestHandler<GetAllProducts, PagesProductsDto>
+	public sealed class GetAllProductsHandler : ValidationsBase<ProductsMovement>, IRequestHandler<GetAllProducts, PagesProductsModel>
 	{
 		private readonly IProductsMovementRepository _productsRepository;
 		private readonly IMapper _mapper;
@@ -30,16 +30,15 @@ namespace Stock.Application.Application.Handlers.Products
 			_logger = logger;
 		}
 
-		public async Task<PagesProductsDto> Handle(GetAllProducts request, CancellationToken cancellationToken)
+		public async Task<PagesProductsModel> Handle(GetAllProducts request, CancellationToken cancellationToken)
 		{
-			var result = await _productsRepository.GetAllAsync(request.page);
-			if (result.list.Count == 0)
+			var result = await _productsRepository.GetAllAsync(request.page, request.itemsPerPage);
+			if (result.Models.Count == 0)
 			{
 				_logger.LogInformation("No Content");
 				NoContent(false);
 			}
-			var toPages = _mapper.Map<(List<ProductsMovementDto> list, int totalPages, int page)>(result);
-			return _mapper.Map<PagesProductsDto>(toPages);
+			return _mapper.Map<PagesProductsModel>(result);
 		}
 	}
 }

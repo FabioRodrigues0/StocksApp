@@ -1,17 +1,10 @@
 ﻿using AutoMapper;
-using Infrastructure.Shared.Services;
 using Infrastructure.Shared.Services.Interface;
 using Moq;
 using Moq.AutoMock;
-using Stock.Application.Application.Handlers.Movement;
 using Stock.Application.Application.Handlers.Products;
-using Stock.Application.Commands;
-using Stock.Application.DTO;
 using Stock.Application.Map;
-using Stock.Application.Queries;
-using Stock.Data.Repositories;
-using Stock.Data.Repositories.Interfaces;
-using Stock.Domain.Models;
+using Stock.Domain.Entities;
 using Xunit;
 
 namespace Stocks.UnitTest.Products

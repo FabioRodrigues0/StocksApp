@@ -32,14 +32,14 @@ namespace Stock.Api.Controllers
 		/// <response code="400">
 		/// When a request error occurs but a message reporting the error is returned
 		/// </response>
-		[HttpGet("page/{page}")]
+		[HttpGet("per/{itemsPerPage}/page/{page}/")]
 		[ProducesResponseType(200)]
 		[ProducesResponseType(204)]
 		[ProducesResponseType(400)]
-		public async Task<IActionResult> Get([FromRoute] int page)
+		public async Task<IActionResult> Get([FromRoute] int page = 1, [FromRoute] int itemsPerPage = 10)
 		{
 			_logger.LogInformation("Begin Request for all Products {page}", page);
-			return ServiceResponse(await _mediator.Send(new GetAllDashboard { page = page }));
+			return ServiceResponse(await _mediator.Send(new GetAllDashboard { page = page, itemsPerPage = itemsPerPage }));
 		}
 
 		/// <summary>
