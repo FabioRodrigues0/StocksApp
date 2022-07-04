@@ -86,8 +86,8 @@ namespace Stock.Data.Repositories
 			return new PagesBase<Movements>
 			{
 				Models = list,
-				CurrentPage = totalPages,
-				Pages = page
+				CurrentPage = page,
+				Pages = totalPages
 			};
 		}
 	}
